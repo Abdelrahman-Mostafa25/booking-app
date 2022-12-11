@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     use HasFactory;
-    protected $primaryKey = ['course_code'];
-    protected $guarded = ['course_code'];
+    public $timestamps = false;
+    protected $primaryKey = 'course_code';
+    protected $guarded = [];
 }

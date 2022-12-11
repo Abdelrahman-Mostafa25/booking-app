@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Requst extends Model
 {
     use HasFactory; 
-    protected $primaryKey = ['request_num_id'];
+    public $timestamps = false;
+    protected $primaryKey = 'request_num_id';
     protected $guarded = ['request_num_id'];
     
 }

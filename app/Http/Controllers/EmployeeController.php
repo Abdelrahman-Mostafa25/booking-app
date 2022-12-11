@@ -51,6 +51,7 @@ class EmployeeController extends Controller
     {
         $employee->update($request->all());
         return $employee;
+        
     }
 
     /**

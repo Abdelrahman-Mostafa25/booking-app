@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Complain extends Model
 {
     use HasFactory;
-    protected $primaryKey = ['compalin_num_id'];
+    public $timestamps = false;
+    protected $primaryKey = 'compalin_num_id';
     protected $guarded = ['compalin_num_id'];
 }

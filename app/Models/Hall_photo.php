@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Hall_photo extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $primaryKey = ['hall_num_id','counter_id'];
     protected $guarded = [];
+    public $incrementing = false;
 }

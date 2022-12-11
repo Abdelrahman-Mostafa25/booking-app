@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Hall extends Model
 {
     use HasFactory;
-    protected $primaryKey = ['hall_num'];
-    protected $guarded = ['hall_num'];
+    public $timestamps = false;
+    protected $primaryKey = 'hall_id';
+    protected $guarded = ['hall_id'];
 }

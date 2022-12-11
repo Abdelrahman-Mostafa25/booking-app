@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Teache extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $primaryKey = ['course_code','employee_num_id'];
+    public $incrementing = false;
     protected $guarded = [];
 }
