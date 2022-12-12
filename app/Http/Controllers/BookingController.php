@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -33,34 +34,41 @@ class BookingController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     *  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id1,$id2)
     {
-        return Booking::findorFail($id);
+        return Booking::where('employee_num_id',$id1)->where('hall_num_id',$id2)->firstOrFail(); 
+
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $id1
+     *  @param  int  $id2
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Booking $booking)
+    public function update(Request $request,$id1,$id2)
     {
-        $booking->update($request->all());
-        return $booking;
+        return DB::table('bookings')
+        ->where('employee_num_id',$id1)
+        ->where('hall_num_id',$id2)
+        ->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $id1
+     * * @param  int  $id2
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Booking $booking)
+    public function destroy($id1,$id2)
     {
+        $booking = Booking::where('employee_num_id',$id1)->where('hall_num_id',$id2);
         $booking->delete();
         return response('',204);
     }

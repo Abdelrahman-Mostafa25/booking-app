@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Teache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeacheController extends Controller
 {
@@ -32,25 +33,30 @@ class TeacheController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $id1
+     * @param  string  $id2
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        return Teache::findorFail($id);
+    public function show($id1,$id2)
+     {
+          $teach =  Teache::where('employee_num_id',$id1)->where('course_code',$id2)->firstOrFail();
+          return $teach;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $id1
+     * @param  string  $id2
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Teache $teache)
+    public function update(Request $request,$id1,$id2)
     {
-        $teache->update($request->all());
-        return $teache;
+        return DB::table('teaches')
+        ->where('employee_num_id',$id1)
+        ->where('course_code',$id2)
+        ->update($request->all());
     }
 
     /**
@@ -59,9 +65,10 @@ class TeacheController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Teache $teache)
+    public function destroy($id1,$id2)
     {
-        $teache->delete();
+        $teach =  Teache::where('employee_num_id',$id1)->where('course_code',$id2);
+        $teach->delete();
         return response('',204);
     }
 }
