@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Hall_photoController;
 use App\Http\Controllers\Hall_supervisorController;
+use App\Http\Controllers\Supervisor_infoController;
 use App\Http\Controllers\TeacheController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,24 +17,38 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/teache/{id1}/{id2}',[TeacheController::class,'show']);
+Route::get('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'show']);
 Route::get('/teache',[TeacheController::class,'index']);
 Route::post('/teache',[TeacheController::class,'store']);
-Route::delete('/teache/{id1}/{id2}',[TeacheController::class,'destroy']);
-Route::put('/teache/{id1}/{id2}',[TeacheController::class,'update']);
+Route::delete('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'destroy']);
+Route::put('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'update']);
 ////////////////////////////////////////
-Route::get('/booking/{id1}/{id2}',[BookingController::class,'show']);
+Route::get('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'show']);
 Route::get('/booking',[BookingController::class,'index']);
 Route::post('/booking',[BookingController::class,'store']);
-Route::delete('/booking/{id1}/{id2}',[BookingController::class,'destroy']);
-Route::put('/booking/{id1}/{id2}',[BookingController::class,'update']);
+Route::delete('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'destroy']);
+Route::put('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'update']);
 
 ////////////////////////////////////////
-Route::get('/hall_supervisor/{id1}',[Hall_supervisorController::class,'show']);
+Route::get('/hall_supervisor/{hall_num_id}',[Hall_supervisorController::class,'show']);
 Route::get('/hall_supervisor',[Hall_supervisorController::class,'index']);
 Route::post('/hall_supervisor',[Hall_supervisorController::class,'store']);
-Route::delete('/hall_supervisor/{id1}/{id2}',[Hall_supervisorController::class,'destroy']);
-Route::put('/hall_supervisor/{id1}/{id2}',[Hall_supervisorController::class,'update']);
+Route::delete('/hall_supervisor/{hall_num_id}/{counter_id}',[Hall_supervisorController::class,'destroy']);
+Route::put('/hall_supervisor/{hall_num_id}/{counter_id}',[Hall_supervisorController::class,'update']);
+
+////////////////////////////////////////
+Route::get('/supervisor_info/{counter_id}',[Supervisor_infoController::class,'show']);
+Route::get('/supervisor_info',[Supervisor_infoController::class,'index']);
+Route::post('/supervisor_info',[Supervisor_infoController::class,'store']);
+Route::delete('/supervisor_info/{counter_id}/{phone_num}',[Supervisor_infoController::class,'destroy']);
+Route::put('/supervisor_info/{counter_id}/{phone_num}',[Supervisor_infoController::class,'update']);
+
+////////////////////////////////////////
+Route::get('/hall_photo/{hall_num_id}',[Hall_photoController::class,'show']);
+Route::get('/hall_photo',[Hall_photoController::class,'index']);
+Route::post('/hall_photo',[Hall_photoController::class,'store']);
+Route::delete('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class,'destroy']);
+Route::put('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class,'update']);
 
 
 Route::get('/', function () {

@@ -26,7 +26,7 @@ class RequstController extends Controller
     public function store(Request $request)
     {
         $requst = Requst::create($request->all()); 
-        return $requst;
+        return $request;
     }
 
     /**

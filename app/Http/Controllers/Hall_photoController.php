@@ -25,7 +25,7 @@ class Hall_photoController extends Controller
      */
     public function store(Request $request)
     {
-        $hall_photo = $request->hasFile('thumbnail');
+        $hall_photo = $request->hasFile('image');
         if($hall_photo)
         {
             $new_photo = $request->file('thumbnail');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supervisor_info;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Supervisor_infoController extends Controller
 {
@@ -37,7 +38,7 @@ class Supervisor_infoController extends Controller
      */
     public function show($id)
     {
-        return Supervisor_info::findorFail($id);
+        return Supervisor_info::where('counter_id',$id)->get();
     }
 
     /**
@@ -45,22 +46,27 @@ class Supervisor_infoController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     * * @param  string  $id2
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Supervisor_info $supervisor_info)
+    public function update(Request $request,$id,$id2)
     {
-        $supervisor_info->update($request->all());
-        return $supervisor_info;
+        return DB::table('supervisor_infos')
+        ->where('counter_id',$id)
+        ->where('phone_num',$id2)
+        ->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
+     * @param   string $id2
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Supervisor_info $supervisor_info)
+    public function destroy($id,$id2)
     {
+        $supervisor_info = Supervisor_info::where('counter_id',$id)->where('phone_num',$id2);
         $supervisor_info->delete();
         return response('',204);
     }

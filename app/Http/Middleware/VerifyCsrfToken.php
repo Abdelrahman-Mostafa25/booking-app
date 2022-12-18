@@ -17,6 +17,10 @@ class VerifyCsrfToken extends Middleware
         'booking/*',
         'booking',
         'hall_supervisor',
-        'hall_supervisor/*'
+        'hall_supervisor/*',
+        'supervisor_info',
+        'supervisor_info/*',
+        'hall_photo',
+        'hall_photo/*'
     ];
 }
