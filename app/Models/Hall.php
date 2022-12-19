@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hall extends Model
 {
+    // protected $table = 'my_table_name';
+
+
     use HasFactory;
     public $timestamps = false;
     protected $primaryKey = 'hall_id';

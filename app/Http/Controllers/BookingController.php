@@ -53,6 +53,7 @@ class BookingController extends Controller
      */
     public function update(Request $request,$id1,$id2)
     {
+        
         return DB::table('bookings')
         ->where('employee_num_id',$id1)
         ->where('hall_num_id',$id2)

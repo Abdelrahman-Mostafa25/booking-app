@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "835c8b65-a877-432e-b81c-0faadcb8c31b",
 		"name": "BookingApp-Apis",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "24819183"
 	},
 	"item": [
@@ -28,7 +28,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/booking/:id",
+							"raw": "http://127.0.0.1:8000/booking/:employee_num_id/:hall_num_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -38,13 +38,17 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"booking",
-								":id"
+								":employee_num_id",
+								":hall_num_id"
 							],
 							"variable": [
 								{
-									"key": "id",
+									"key": "employee_num_id",
+									"value": null
+								},
+								{
+									"key": "hall_num_id",
 									"value": null
 								}
 							]
@@ -63,21 +67,37 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/booking",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"booking"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "employee_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "hall_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "start_time_booking",
+									"value": "12:00",
+									"type": "text"
+								},
+								{
+									"key": "end_time_booking",
+									"value": "5:00",
+									"type": "text"
+								},
+								{
+									"key": "booking_day",
+									"value": "2022-01-05",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/booking"
 					},
 					"response": []
 				},
@@ -93,7 +113,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/booking/:id",
+							"raw": "http://127.0.0.1:8000/booking/:employee_num_id/:hall_num_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -103,14 +123,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"booking",
-								":id"
+								":employee_num_id",
+								":hall_num_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "employee_num_id",
+									"value": null
+								},
+								{
+									"key": "hall_num_id",
+									"value": null
 								}
 							]
 						}
@@ -128,8 +152,18 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "booking_day",
+									"value": "2022-10-11",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/booking/:id",
+							"raw": "http://127.0.0.1:8000/booking/:employee_num_id/:hall_num_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -139,14 +173,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"booking",
-								":id"
+								":employee_num_id",
+								":hall_num_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "employee_num_id",
+									"value": "3"
+								},
+								{
+									"key": "hall_num_id",
+									"value": "1"
 								}
 							]
 						}
@@ -158,21 +196,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/booking",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"booking"
-							]
-						}
+						"url": "http://127.0.0.1:8000/booking"
 					},
 					"response": []
 				}
@@ -210,7 +234,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -228,21 +252,27 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/complain",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"complain"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "employee_num_id",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "hall_num",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "text_complain",
+									"value": "test test",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/api/complain"
 					},
 					"response": []
 				},
@@ -257,6 +287,16 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text_complain",
+									"value": "test update",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/complain/:id",
 							"protocol": "http",
@@ -275,7 +315,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -311,7 +351,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "3"
 								}
 							]
 						}
@@ -323,21 +363,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/complain",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"complain"
-							]
-						}
+						"url": "http://127.0.0.1:8000/api/complain"
 					},
 					"response": []
 				}
@@ -357,8 +383,78 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "course_code",
+									"value": "comp 303",
+									"type": "text"
+								},
+								{
+									"key": "hall_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "course_name",
+									"value": "DB",
+									"type": "text"
+								},
+								{
+									"key": "credit_hours",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "is_special",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "practic",
+									"value": "lap comp 303",
+									"type": "text"
+								},
+								{
+									"key": "semester",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "level",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://127.0.0.1:8000/api/course"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "level",
+									"value": "6",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/course",
+							"raw": "http://127.0.0.1:8000/api/course/:id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -369,16 +465,23 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"course"
+								"course",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "comp 303"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Course",
+					"name": "Delete Course",
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Accept",
@@ -404,43 +507,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Course",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/cocourseplain/:id",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"cocourseplain",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
+									"value": "comp 303"
 								}
 							]
 						}
@@ -476,7 +543,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "comp 203"
 								}
 							]
 						}
@@ -488,21 +555,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/course",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"course"
-							]
-						}
+						"url": "http://127.0.0.1:8000/api/course"
 					},
 					"response": []
 				}
@@ -558,6 +611,21 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone_num",
+									"value": "010",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "236",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/employee/:id",
 							"protocol": "http",
@@ -576,7 +644,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -612,7 +680,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "2"
 								}
 							]
 						}
@@ -632,23 +700,35 @@
 						],
 						"body": {
 							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/employee",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"employee"
+							"formdata": [
+								{
+									"key": "employee_name",
+									"value": "tamer",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tamer@em123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "246",
+									"type": "text"
+								},
+								{
+									"key": "phone_num",
+									"value": "012",
+									"type": "text"
+								},
+								{
+									"key": "specialization",
+									"value": "cs",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/api/employee"
 					},
 					"response": []
 				},
@@ -657,21 +737,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/employee",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"employee"
-							]
-						}
+						"url": "http://127.0.0.1:8000/api/employee"
 					},
 					"response": []
 				}
@@ -691,21 +757,67 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "capacity",
+									"value": "300",
+									"type": "text"
+								},
+								{
+									"key": "has_monitor",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "has_projector",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "has_air_condition",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "is_special",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "hall",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "avilable",
+									"type": "text"
+								},
+								{
+									"key": "description_place",
+									"value": "bulding 1 floor 2 the first right when up from mastar door ",
+									"type": "text"
+								},
+								{
+									"key": "floor_place",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "building_place",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "hall_name",
+									"value": "Helal",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/api/hall"
 					},
 					"response": []
 				},
@@ -720,6 +832,16 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "capacity",
+									"value": "250",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/hall/:id",
 							"protocol": "http",
@@ -738,7 +860,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -774,7 +896,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -810,7 +932,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "2"
 								}
 							]
 						}
@@ -822,21 +944,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall"
-							]
-						}
+						"url": "http://127.0.0.1:8000/api/hall"
 					},
 					"response": []
 				}
@@ -856,21 +964,27 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_photo",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall_photo"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/home/abdo/Downloads/download.png"
+								},
+								{
+									"key": "hall_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "counter_id",
+									"value": "6",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/hall_photo"
 					},
 					"response": []
 				},
@@ -885,8 +999,18 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/abdo/Downloads/Telegram Desktop/3.jpg"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_photo/:id",
+							"raw": "http://127.0.0.1:8000/hall_photo/:hall_num_id/:counter_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -896,14 +1020,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_photo",
-								":id"
+								":hall_num_id",
+								":counter_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": "1"
+								},
+								{
+									"key": "counter_id",
+									"value": "1"
 								}
 							]
 						}
@@ -922,7 +1050,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_photo/:id",
+							"raw": "http://127.0.0.1:8000/hall_photo/:hall_num_id/:counter_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -932,14 +1060,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_photo",
-								":id"
+								":hall_num_id",
+								":counter_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": "1"
+								},
+								{
+									"key": "counter_id",
+									"value": "2"
 								}
 							]
 						}
@@ -958,7 +1090,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_photo/:id",
+							"raw": "http://127.0.0.1:8000/hall_photo/:hall_num_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -968,14 +1100,13 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_photo",
-								":id"
+								":hall_num_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": "1"
 								}
 							]
 						}
@@ -984,24 +1115,17 @@
 				},
 				{
 					"name": "Show all hall photo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_photo",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall_photo"
-							]
-						}
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://127.0.0.1:8000/hall_photo"
 					},
 					"response": []
 				}
@@ -1021,21 +1145,22 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_supervisor",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall_supervisor"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "hall_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "supervisor_name",
+									"value": "www",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/hall_supervisor"
 					},
 					"response": []
 				},
@@ -1050,8 +1175,18 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "supervisor_name",
+									"value": "tete",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_supervisor/:id",
+							"raw": "http://127.0.0.1:8000/hall_supervisor/:hall_num_id/:counter_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1061,14 +1196,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_supervisor",
-								":id"
+								":hall_num_id",
+								":counter_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": null
+								},
+								{
+									"key": "counter_id",
+									"value": null
 								}
 							]
 						}
@@ -1087,7 +1226,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_supervisor/:id",
+							"raw": "http://127.0.0.1:8000/hall_supervisor/:hall_num_id/:counter_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1097,14 +1236,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_supervisor",
-								":id"
+								":hall_num_id",
+								":counter_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": null
+								},
+								{
+									"key": "counter_id",
+									"value": null
 								}
 							]
 						}
@@ -1123,7 +1266,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_supervisor/:id",
+							"raw": "http://127.0.0.1:8000/hall_supervisor/:hall_num_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1133,14 +1276,13 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"hall_supervisor",
-								":id"
+								":hall_num_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "hall_num_id",
+									"value": null
 								}
 							]
 						}
@@ -1152,21 +1294,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/hall_supervisor",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"hall_supervisor"
-							]
-						}
+						"url": "http://127.0.0.1:8000/hall_supervisor"
 					},
 					"response": []
 				}
@@ -1186,21 +1314,42 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/request",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"request"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "employee_num_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "hall_num",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "booking_day",
+									"value": "2022-12-08",
+									"type": "text"
+								},
+								{
+									"key": "start_time_booking",
+									"value": "2:00",
+									"type": "text"
+								},
+								{
+									"key": "end_time_booking",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "permental",
+									"value": "5",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/api/requst"
 					},
 					"response": []
 				},
@@ -1215,8 +1364,28 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "booking_day",
+									"value": "2022-12-05",
+									"type": "text"
+								},
+								{
+									"key": "end_time_booking",
+									"value": "07:09",
+									"type": "text"
+								},
+								{
+									"key": "permental",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/request/:id",
+							"raw": "http://127.0.0.1:8000/api/requst/:id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1227,13 +1396,13 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"request",
+								"requst",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -1252,7 +1421,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/request/:id",
+							"raw": "http://127.0.0.1:8000/api/requst/:id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1263,13 +1432,13 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"request",
+								"requst",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "2"
 								}
 							]
 						}
@@ -1288,7 +1457,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/request/:id",
+							"raw": "http://127.0.0.1:8000/api/requst/:id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1299,13 +1468,13 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"request",
+								"requst",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -1317,21 +1486,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/request",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"request"
-							]
-						}
+						"url": "http://127.0.0.1:8000/api/requst"
 					},
 					"response": []
 				}
@@ -1351,21 +1506,22 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/supervisor_info",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"supervisor_info"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "counter_id",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "phone_num",
+									"value": "01136",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/supervisor_info"
 					},
 					"response": []
 				},
@@ -1381,7 +1537,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/supervisor_info/:id",
+							"raw": "http://127.0.0.1:8000/supervisor_info/:counter_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1391,14 +1547,13 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"supervisor_info",
-								":id"
+								":counter_id"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "counter_id",
+									"value": "4"
 								}
 							]
 						}
@@ -1417,7 +1572,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/supervisor_info/:id",
+							"raw": "http://127.0.0.1:8000/supervisor_info/:counter_id/:phone_num",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1427,14 +1582,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"supervisor_info",
-								":id"
+								":counter_id",
+								":phone_num"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "counter_id",
+									"value": "4"
+								},
+								{
+									"key": "phone_num",
+									"value": "123"
 								}
 							]
 						}
@@ -1452,8 +1611,18 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone_num",
+									"value": "123",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/supervisor_infos/:id",
+							"raw": "http://127.0.0.1:8000/supervisor_info/:counter_id/:phone_num",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1463,14 +1632,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
-								"supervisor_infos",
-								":id"
+								"supervisor_info",
+								":counter_id",
+								":phone_num"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "counter_id",
+									"value": "4"
+								},
+								{
+									"key": "phone_num",
+									"value": "01136"
 								}
 							]
 						}
@@ -1482,21 +1655,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/supervisor_info",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"supervisor_info"
-							]
-						}
+						"url": "http://127.0.0.1:8000/supervisor_info"
 					},
 					"response": []
 				}
@@ -1516,21 +1675,22 @@
 								"type": "default"
 							}
 						],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/teache",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"teache"
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "course_code",
+									"value": "comp 203",
+									"type": "text"
+								},
+								{
+									"key": "employee_num_id",
+									"value": "3",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "http://127.0.0.1:8000/teache"
 					},
 					"response": []
 				},
@@ -1545,8 +1705,18 @@
 								"type": "default"
 							}
 						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "employee_num_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/teache/:id",
+							"raw": "http://127.0.0.1:8000/teache/:employee_num_id/:course_code",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1556,14 +1726,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"teache",
-								":id"
+								":employee_num_id",
+								":course_code"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "employee_num_id",
+									"value": null
+								},
+								{
+									"key": "course_code",
+									"value": null
 								}
 							]
 						}
@@ -1582,7 +1756,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/teache/:id",
+							"raw": "http://127.0.0.1:8000/teache/:employee_num_id/:course_code",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1592,14 +1766,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"teache",
-								":id"
+								":employee_num_id",
+								":course_code"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "employee_num_id",
+									"value": null
+								},
+								{
+									"key": "course_code",
+									"value": null
 								}
 							]
 						}
@@ -1618,7 +1796,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/teache/:id",
+							"raw": "http://127.0.0.1:8000/teache/:employee_num_id/:course_code",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1628,14 +1806,18 @@
 							],
 							"port": "8000",
 							"path": [
-								"api",
 								"teache",
-								":id"
+								":employee_num_id",
+								":course_code"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "employee_num_id",
+									"value": null
+								},
+								{
+									"key": "course_code",
+									"value": null
 								}
 							]
 						}
@@ -1647,21 +1829,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/teache",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"teache"
-							]
-						}
+						"url": "http://127.0.0.1:8000/teache"
 					},
 					"response": []
 				}
