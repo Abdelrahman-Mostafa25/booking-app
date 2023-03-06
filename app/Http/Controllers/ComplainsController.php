@@ -25,6 +25,10 @@ class ComplainsController extends Controller
      */
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'employee_num_id' => 'required',
+        //     'hall_num' => 'required',
+        // ]);
         $complain = Complain::create($request->all()); 
         return $complain;
     }
