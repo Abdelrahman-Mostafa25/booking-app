@@ -30,6 +30,15 @@ class CourseController extends Controller
     public function store(CreateCourseRrequest $request)
     {
         $course = $request->all();
+
+        // check if the hall_num exists in the halls table
+        $existingHall = DB::table('halls')
+            ->where('hall_id', $request->get('hall_num_id'))
+            ->first();
+
+        if (!$existingHall) {
+            return response()->json(['message' => 'Hall number does not exist.'], 422);
+        }
         $concatenatedData =
             $request->get('course_code') .
             '-' . $request->get('hall_num_id') .

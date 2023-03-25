@@ -73,7 +73,6 @@ class EmployeeController extends Controller
                 return "Not Found";
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
-        return Employee::findorFail($employee_id);
     }
 
     /**
