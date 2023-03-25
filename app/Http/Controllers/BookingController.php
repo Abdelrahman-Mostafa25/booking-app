@@ -31,16 +31,16 @@ class BookingController extends Controller
     public function store(CreateBookRrequest $request)
     {
         $data = $request->all();
-        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-'. $request->get('end_time_booking');
-        
+        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-' . $request->get('end_time_booking') . '-' . $request->get('booking_day');
+
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:bookings,concatenated_data',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an employee that booked the same hall in the same time.'], 422);
         }
-
+        $concatenatedData = str_replace(' ', '', $concatenatedData);
         DB::table('bookings')->insert([
             'employee_num_id' => $request->get('employee_num_id'),
             'hall_num_id' => $request->get('hall_num_id'),
@@ -48,8 +48,8 @@ class BookingController extends Controller
             'end_time_booking' => $request->get('end_time_booking'),
             'booking_day' => $request->get('booking_day'),
             'concatenated_data' => $concatenatedData,
-            ]);
-    
+        ]);
+
         return $data;
     }
 
@@ -60,18 +60,16 @@ class BookingController extends Controller
      *  @param  int  $hall_num_id
      * @return \Illuminate\Http\Response
      */
-    public function show($employee_num_id,$hall_num_id)
+    public function show($employee_num_id, $hall_num_id)
     {
         if (filled($employee_num_id) && filled($hall_num_id) && is_numeric($employee_num_id) && is_numeric($hall_num_id)) {
             $bookings = Booking::where('employee_num_id', $employee_num_id)
-                                ->where('hall_num_id', $hall_num_id)
-                                ->get();
+                ->where('hall_num_id', $hall_num_id)
+                ->get();
             return response()->json($bookings);
-        }
-         else {
+        } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-
     }
 
     /**
@@ -83,22 +81,47 @@ class BookingController extends Controller
      *  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBookIdRrequest $request,$id,$employee_num_id,$hall_num_id)
+    public function update(UpdateBookIdRrequest $request, $id, $employee_num_id, $hall_num_id)
     {
         if (filled($id) && filled($employee_num_id) && filled($hall_num_id) && is_numeric($employee_num_id) && is_numeric($hall_num_id) && is_numeric($id)) {
-            $bookings =DB::table('bookings')
-            ->where('id',$id)
-            ->where('employee_num_id',$employee_num_id)
-            ->where('hall_num_id',$hall_num_id)
-            ->update($request->all());
-            return response()->json($bookings);
-            } 
-        else {
+            $booking = DB::table('bookings')
+                ->where('id', $id)
+                ->where('employee_num_id', $employee_num_id)
+                ->where('hall_num_id', $hall_num_id)
+                ->get();
+            if ($booking->isNotEmpty()) {
+                $bookings = DB::table('bookings')
+                    ->where('id', $id)
+                    ->where('employee_num_id', $employee_num_id)
+                    ->where('hall_num_id', $hall_num_id)
+                    ->update($request->all());
+
+                $updatedBooking = DB::table('bookings')
+                    ->where('id', $id)
+                    ->where('employee_num_id', $employee_num_id)
+                    ->where('hall_num_id', $hall_num_id)
+                    ->first();
+
+                $concatenatedData = $updatedBooking->hall_num_id
+                    . '-' . date_format(date_create($updatedBooking->start_time_booking), 'H:i')
+                    . '-' . date_format(date_create($updatedBooking->end_time_booking), 'H:i')
+                    . '-' . $updatedBooking->booking_day;
+                $concatenatedData = str_replace(' ', '', $concatenatedData);
+                $bookings = DB::table('bookings')
+                    ->where('id', $id)
+                    ->where('employee_num_id', $employee_num_id)
+                    ->where('hall_num_id', $hall_num_id)
+                    ->update(['concatenated_data' => $concatenatedData]);
+
+                return response()->json($bookings);
+            } else {
+                return "Not Found";
+            }
+        } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-        
-        
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -108,19 +131,26 @@ class BookingController extends Controller
      *  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id,$employee_num_id,$hall_num_id)
+    public function destroy($id, $employee_num_id, $hall_num_id)
     {
         if (filled($id) && filled($employee_num_id) && filled($hall_num_id) && is_numeric($employee_num_id) && is_numeric($hall_num_id) && is_numeric($id)) {
-            $booking =DB::table('bookings')
-            ->where('id',$id)
-            ->where('employee_num_id',$employee_num_id)
-            ->where('hall_num_id',$hall_num_id);
-            $booking->delete();
-            return response('',204);
-            } 
-        else {
+            $booking = DB::table('bookings')
+                ->where('id', $id)
+                ->where('employee_num_id', $employee_num_id)
+                ->where('hall_num_id', $hall_num_id)
+                ->get();
+            if ($booking->isNotEmpty()) {
+                $booking = DB::table('bookings')
+                    ->where('id', $id)
+                    ->where('employee_num_id', $employee_num_id)
+                    ->where('hall_num_id', $hall_num_id);
+                $booking->delete();
+                return response('', 204);
+            } else {
+                return "Not Found";
+            }
+        } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-        
     }
 }

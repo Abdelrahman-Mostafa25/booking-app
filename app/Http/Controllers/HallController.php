@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Halls\CreateHallRrequest;
 use App\Http\Requests\Halls\UpdateHallRrequest;
 use App\Models\Hall;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -31,7 +31,8 @@ class HallController extends Controller
     public function store(CreateHallRrequest $request)
     {
         $hall = $request->all();
-        $concatenatedData = $request->get('hall_name') . 
+        $concatenatedData = 
+        $request->get('hall_name') . 
         '-' . $request->get('capacity') . 
         '-' . $request->get('has_monitor') . 
         '-' . $request->get('has_projector') . 
@@ -49,8 +50,8 @@ class HallController extends Controller
     
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an Hall is already exite.'], 422);
-        }
-
+        }   
+        $concatenatedData = str_replace(' ', '', $concatenatedData);
         DB::table('halls')->insert([
             'hall_name' => $request->get('hall_name'),
             'capacity' => $request->get('capacity'),
@@ -99,10 +100,27 @@ class HallController extends Controller
     public function update(UpdateHallRrequest $request,$hall)
     {
         if (filled($hall) && is_numeric($hall)) {
-            $bookings =DB::table('halls')
-            ->where('hall_id',$hall)
-            ->update($request->all());
-            return response()->json($bookings);
+             $Halls = Hall::find($hall);
+             if ($Halls) {
+                $Halls->fill($request->all());
+                $concatenatedData = 
+                $Halls->hall_name . 
+                '-' . $Halls->capacity . 
+                '-' . $Halls->has_monitor . 
+                '-' . $Halls->has_projector. 
+                '-' . $Halls->has_air_condition . 
+                '-' . $Halls->is_special . 
+                '-' . $Halls->type . 
+                '-' . $Halls->status . 
+                '-' . $Halls->description_place. 
+                '-' . $Halls->floor_place . 
+                '-'. $Halls->building_place;
+                $concatenatedData = str_replace(' ', '', $concatenatedData);
+                $Halls->concatenated_data = $concatenatedData;
+                $Halls->save();
+                return $Halls;
+            } else
+                return "Not Found";
             } 
         else {
             return response()->json(['message' => 'Invalid input.'], 400);
