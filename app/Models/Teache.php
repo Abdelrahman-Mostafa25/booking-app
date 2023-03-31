@@ -9,7 +9,7 @@ class Teache extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $primaryKey = ['course_code','employee_num_id'];
+    protected $primaryKey = ['id'];
     public $incrementing = false;
     protected $guarded = [];
 }
