@@ -32,12 +32,19 @@ class RequstController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $employee_num_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($employee_num_id)
     {
-        return Requst::findorFail($id);
+        if (filled($employee_num_id) && is_numeric($employee_num_id)) {
+            $data = Requst::where('employee_num_id', $employee_num_id)->get();
+            if ($data)
+                return $data;
+            else
+                return "Not Found";
+        } else
+            return response()->json(['message' => 'Invalid input.'], 400);
     }
 
     /**

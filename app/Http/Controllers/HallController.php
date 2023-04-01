@@ -20,7 +20,18 @@ class HallController extends Controller
      */
     public function index()
     {
-        return Hall::all();
+        $halls = Hall::all();
+
+        foreach ($halls as $hall) {
+            $hall_photos = Hall_photo::where('hall_num_id', $hall->hall_id)->get();
+            $photos = [];
+            foreach ($hall_photos as $photo) {
+                $photos[] = $photo->photo;
+            }
+            $hall['photos'] = $photos;
+        }
+    
+        return $halls;
     }
 
     /**
