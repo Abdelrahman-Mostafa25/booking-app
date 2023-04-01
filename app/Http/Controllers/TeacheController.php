@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Teach\CreateTeachRrequest;
+use App\Http\Requests\Teach\UpdateTeachRrequest;
 use App\Models\Teache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +27,7 @@ class TeacheController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateTeachRrequest $request)
     {
         $teache = $request->all();
         // check if the employee exists in the halls table
@@ -95,7 +97,7 @@ class TeacheController extends Controller
      * @param  string  $course_code
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $employee_num_id, $course_code)
+    public function update(UpdateTeachRrequest $request, $employee_num_id, $course_code)
     {
         if (!is_numeric($employee_num_id) && !filled($employee_num_id)) {
             return response()->json(['message' => 'Invalid employee number.'], 400);

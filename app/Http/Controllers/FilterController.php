@@ -1,0 +1,128 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Booking;
+use App\Models\Hall;
+use Illuminate\Support\Facades\DB;
+
+
+class FilterController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($day_date, $start_time, $end_time, $hall_type)
+    {
+        // $eliminated_halls = DB::table('bookings')
+        //     ->where('booking_day', $day_date)
+        //     ->where(function ($query) use ($start_time, $end_time) {
+        //         $query->where('start_time_booking', '<=', $start_time)
+        //             ->where('end_time_booking', '>', $start_time)
+        //             ->orWhere('start_time_booking', '<=', $end_time)
+        //             ->where('end_time_booking', '>=', $end_time);
+        //     })
+        //     ->pluck('hall_num_id')
+        //     ->toArray();
+        $eliminated_halls = DB::table('bookings')
+                ->where('booking_day', $day_date)
+                ->whereNotBetween('start_time_booking', [$start_time, $end_time])
+                ->WhereNotBetween('end_time_booking', [$start_time, $end_time])
+                ->pluck('hall_num_id')
+                ->toArray();
+
+
+        $available_halls = DB::table('halls')
+            ->whereNotIn('hall_id', $eliminated_halls)
+            ->get()->map(function ($hall) {
+                $photos = DB::table('hall_photos')->where('hall_num_id', $hall->hall_id)->get();
+                $photoData = [];
+                foreach ($photos as $photo) {
+                    $photoData[] = $photo->photo;
+                }
+                return [
+                    'hall_id' => $hall->hall_id,
+                    'hall_name' => $hall->hall_name,
+                    'capacity' => $hall->capacity,
+                    'is_special' => $hall->is_special,
+                    'type' => $hall->type,
+                    'status' => $hall->status,
+                    'description_place' => $hall->description_place,
+                    'floor_place' => $hall->floor_place,
+                    'building_place' => $hall->building_place,
+                    'hall_photos' => $photoData
+                ];
+            });
+
+        return $available_halls;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

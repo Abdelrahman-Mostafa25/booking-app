@@ -13,7 +13,7 @@ class UpdateTeachRrequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return True;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateTeachRrequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'course_code' => 'string',
+            'employee_num_id' => 'integer',
         ];
     }
 }

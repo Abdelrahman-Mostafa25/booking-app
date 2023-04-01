@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\Hall_photoController;
 use App\Http\Controllers\Hall_supervisorController;
 use App\Http\Controllers\Supervisor_infoController;
@@ -49,7 +50,9 @@ Route::get('/hall_photo',[Hall_photoController::class,'index']);
 Route::post('/hall_photo',[Hall_photoController::class,'store']);
 Route::delete('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class,'destroy']);
 Route::put('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class,'update']);
+////////////////////////////////////
 
+Route::get('/filter/{day_date}/{start_time}/{end_time}/{hall_type}',[FilterController::class,'show']);
 
 Route::get('/', function () {
     return view('welcome');

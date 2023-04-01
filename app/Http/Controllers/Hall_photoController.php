@@ -28,7 +28,6 @@ class Hall_photoController extends Controller
     {
         $request->validate([
             'hall_num_id' => 'required',
-            'counter_id' => 'required',
              'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
         
