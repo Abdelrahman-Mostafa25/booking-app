@@ -58,7 +58,7 @@ class FilterController extends Controller
         //             ->where('end_time_booking', '>=', $end_time);
         //     })
         //     ->pluck('hall_num_id')
-        //     ->toArray();
+        ////     ->toArray();
         $eliminated_halls = DB::table('bookings')
                 ->where('booking_day', $day_date)
                 ->whereNotBetween('start_time_booking', [$start_time, $end_time])
