@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Hall;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class FilterController extends Controller
@@ -47,28 +49,53 @@ class FilterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($day_date, $start_time, $end_time, $hall_type)
+    public function show($bookingDay, $startTime, $endTime, $hall_type, $capacity_hall)
     {
-        // $eliminated_halls = DB::table('bookings')
-        //     ->where('booking_day', $day_date)
-        //     ->where(function ($query) use ($start_time, $end_time) {
-        //         $query->where('start_time_booking', '<=', $start_time)
-        //             ->where('end_time_booking', '>', $start_time)
-        //             ->orWhere('start_time_booking', '<=', $end_time)
-        //             ->where('end_time_booking', '>=', $end_time);
-        //     })
-        //     ->pluck('hall_num_id')
-        ////     ->toArray();
-        $eliminated_halls = DB::table('bookings')
-                ->where('booking_day', $day_date)
-                ->whereNotBetween('start_time_booking', [$start_time, $end_time])
-                ->WhereNotBetween('end_time_booking', [$start_time, $end_time])
-                ->pluck('hall_num_id')
-                ->toArray();
 
+        $validator = Validator::make([
+            'bookingDay' => $bookingDay,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+            'hall_type' => $hall_type,
+            'capacity_hall' => $capacity_hall
+        ], [
+            'bookingDay' => 'required|date|after_or_equal:today',
+            'startTime' => 'required|date_format:H:i',
+            'endTime' => 'required|date_format:H:i|after:startTime',
+            'hall_type' => 'required|string',
+            'capacity_hall' => 'required|integer'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $eliminated_halls = DB::table('bookings')
+            ->where('booking_day', '=', $bookingDay)
+            ->where('type', '=', $hall_type)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query->where('start_time_booking', '>=', $startTime)
+                        ->where('start_time_booking', '<', $endTime);
+                })
+                    ->orWhere(function ($query) use ($startTime, $endTime) {
+                        $query->where('end_time_booking', '>', $startTime)
+                            ->where('end_time_booking', '<=', $endTime);
+                    })
+                    ->orWhere(function ($query) use ($startTime, $endTime) {
+                        $query->where('start_time_booking', '<', $startTime)
+                            ->where('end_time_booking', '>', $endTime);
+                    });
+            })
+            ->pluck('hall_num_id')
+            ->toArray();
 
         $available_halls = DB::table('halls')
             ->whereNotIn('hall_id', $eliminated_halls)
+            ->where('type', '=', $hall_type)
+            ->where('capacity', '=', $capacity_hall)
             ->get()->map(function ($hall) {
                 $photos = DB::table('hall_photos')->where('hall_num_id', $hall->hall_id)->get();
                 $photoData = [];

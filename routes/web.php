@@ -52,7 +52,7 @@ Route::delete('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::cl
 Route::put('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class,'update']);
 ////////////////////////////////////
 
-Route::get('/filter/{day_date}/{start_time}/{end_time}/{hall_type}',[FilterController::class,'show']);
+Route::get('/filter/{day_date}/{start_time}/{end_time}/{hall_type}/{capacity_hall}',[FilterController::class,'show']);
 
 Route::get('/', function () {
     return view('welcome');
