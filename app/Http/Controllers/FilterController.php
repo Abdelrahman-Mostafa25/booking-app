@@ -59,11 +59,11 @@ class FilterController extends Controller
             'hall_type' => $hall_type,
             'capacity_hall' => $capacity_hall
         ], [
-            'bookingDay' => 'required|date|after_or_equal:today',
-            'startTime' => 'required|date_format:H:i',
-            'endTime' => 'required|date_format:H:i|after:startTime',
-            'hall_type' => 'required|string',
-            'capacity_hall' => 'required|integer'
+            'bookingDay' => 'date|after_or_equal:today',
+            'startTime' => 'date_format:H:i',
+            'endTime' => 'date_format:H:i|after:startTime',
+            'hall_type' => 'string',
+            'capacity_hall' => 'integer'
         ]);
     
         if ($validator->fails()) {
