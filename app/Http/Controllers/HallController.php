@@ -80,6 +80,7 @@ class HallController extends Controller
         ]);
 
         return $hall;
+        
     }
 
     /**

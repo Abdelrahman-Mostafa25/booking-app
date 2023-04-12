@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Requst\CreatRequst;
+use App\Models\Employee;
 use App\Models\Requst;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,16 @@ class RequstController extends Controller
      */
     public function index()
     {
-        return Requst::all();
+        $requests = Requst::all();
+        $responses = [];
+        foreach ($requests as $request) {
+            $employee = Employee::findOrFail($request->employee_num_id);
+            $response = $request;
+            $response['employee_email'] = $employee->email;
+            $response['employee_name'] = $employee->employee_name;
+            $responses[] = $response;
+        }
+        return $responses;
     }
 
     /**
@@ -23,10 +34,10 @@ class RequstController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatRequst $request)
     {
         $requst = Requst::create($request->all()); 
-        return $request;
+        return $requst;
     }
 
     /**

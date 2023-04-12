@@ -4,8 +4,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\Hall_photoController;
 use App\Http\Controllers\Hall_supervisorController;
+use App\Http\Controllers\RequstController;
 use App\Http\Controllers\Supervisor_infoController;
 use App\Http\Controllers\TeacheController;
+use App\Models\Requst;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,6 +55,17 @@ Route::put('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class
 ////////////////////////////////////
 
 Route::get('/filter/{day_date}/{start_time}/{end_time}/{hall_type}/{capacity_hall}',[FilterController::class,'show']);
+
+////////////////////////////////////////
+
+// Route::get('/requst/{employee_num_id}',[RequstController::class,'show']);
+// Route::get('/requst',[RequstController::class,'index']);
+// Route::post('/requst',[RequstController::class,'store']);
+// Route::delete('/requst/{request_num_id}',[RequstController::class,'destroy']);
+// Route::put('/requst/{request_num_id}',[RequstController::class,'update']);
+
+////////////////////////////////////
+
 
 Route::get('/', function () {
     return view('welcome');
