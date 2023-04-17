@@ -31,7 +31,7 @@ class BookingController extends Controller
     public function store(CreateBookRrequest $request)
     {
         $data = $request->all();
-        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-' . $request->get('end_time_booking') . '-' . $request->get('booking_day');
+        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-' . $request->get('end_time_booking') . '-' . $request->get('booking_day'). '-' . $request->get('type');
 
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:bookings,concatenated_data',
@@ -47,6 +47,7 @@ class BookingController extends Controller
             'start_time_booking' => $request->get('start_time_booking'),
             'end_time_booking' => $request->get('end_time_booking'),
             'booking_day' => $request->get('booking_day'),
+            'type' => $request->get('type'),
             'concatenated_data' => $concatenatedData,
         ]);
 

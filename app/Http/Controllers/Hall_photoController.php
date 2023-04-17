@@ -70,15 +70,15 @@ class Hall_photoController extends Controller
         $hall_photo = Hall_photo::where('hall_num_id',$id)
         ->where('counter_id',$id2)->get();
         
-
-       
-      
-    $imageName = time().'.'.$request->photo->extension();
-    $path = 'image/hall_photos';
-    // Public Folder
-    $request->photo->move(public_path($path), $imageName);
-        
-       return $request;    
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $imageName = time().'.'.$request->photo->extension();
+            $path = 'image/hall_photos';
+            // Public Folder
+            $request->photo->move(public_path($path), $imageName);
+             return $request;
+        } else {
+            return 'test';
+        }
     }
 
     /**
