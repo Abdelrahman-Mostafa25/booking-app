@@ -43,6 +43,7 @@ class CourseController extends Controller
             $request->get('course_code') .
             '-' . $request->get('hall_num_id') .
             '-' . $request->get('course_name') .
+            '-' . $request->get('program') .
             '-' . $request->get('credit_hours') .
             '-' . $request->get('is_special') .
             '-' . $request->get('practic') .
@@ -61,6 +62,7 @@ class CourseController extends Controller
             'course_code' => $request->get('course_code'),
             'hall_num_id' => $request->get('hall_num_id'),
             'course_name' => $request->get('course_name'),
+            'program' => $request->get('program'),
             'credit_hours' => $request->get('credit_hours'),
             'is_special' => $request->get('is_special'),
             'practic' => $request->get('practic'),

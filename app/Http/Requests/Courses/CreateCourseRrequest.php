@@ -27,6 +27,7 @@ class CreateCourseRrequest extends FormRequest
             'course_code' => 'required|string',
             'hall_num_id' => 'required|integer',
             'course_name' => 'required|string',
+            'program' => 'required|string',
             'practic' => 'required|string',
             'is_special' => 'required|bool',
             'credit_hours' => 'required|integer',

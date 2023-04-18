@@ -32,9 +32,9 @@ class CreateHallRrequest extends FormRequest
             'is_special' => 'required|bool',
             'type' => 'required|string',
             'status' => 'required|string',
-            'description_place' => 'required|string',
-            'floor_place' => 'required|integer',
-            'building_place' => 'required|integer',
+            'description_place' => 'string',
+            'floor_place' => 'integer',
+            'building_place' => 'integer',
         ];
     }
 }
