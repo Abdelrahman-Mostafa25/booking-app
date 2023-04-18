@@ -50,12 +50,33 @@ class RequstController extends Controller
     {
         if (filled($request_num_id) && is_numeric($request_num_id)) {
             $data = Requst::where('request_num_id', $request_num_id)->get();
-            if ($data)
-                return response()->json($data);
+            $responses = [];
+            if ($data){
+                foreach ($data as $request) {
+                    $employee = Employee::findOrFail($request->employee_num_id);
+                    $response = $request;
+                    $response['employee_email'] = $employee->email;
+                    $response['employee_name'] = $employee->employee_name;
+                    $responses[] = $response;
+                }
+                return response()->json($responses);
+            }
             else
                 return "Not Found";
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
+
+
+            $requests = Requst::all();
+            $responses = [];
+            foreach ($requests as $request) {
+                $employee = Employee::findOrFail($request->employee_num_id);
+                $response = $request;
+                $response['employee_email'] = $employee->email;
+                $response['employee_name'] = $employee->employee_name;
+                $responses[] = $response;
+            }
+            return $responses;
     }
 
     /**
