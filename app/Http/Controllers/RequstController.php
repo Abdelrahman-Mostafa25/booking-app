@@ -51,7 +51,7 @@ class RequstController extends Controller
         if (filled($request_num_id) && is_numeric($request_num_id)) {
             $data = Requst::where('request_num_id', $request_num_id)->get();
             if ($data)
-                return $data;
+                return response()->json($data);
             else
                 return "Not Found";
         } else
