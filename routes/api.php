@@ -37,7 +37,16 @@ Route::apiResource("requst",RequstController::class);
 // Route::apiResource("booking",BookingController::class);
 
 
+Route::get('getRequst/{request_num_id}',[RequstController::class,'showreq']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+
+
+
+
+

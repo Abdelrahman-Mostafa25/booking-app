@@ -57,7 +57,6 @@ Route::put('/hall_photo/{hall_num_id}/{counter_id}',[Hall_photoController::class
 Route::get('/filter/{day_date}/{start_time}/{end_time}/{hall_type}/{capacity_hall}',[FilterController::class,'show']);
 
 ////////////////////////////////////////
-Route::get('/requst/{request_num_id}',[RequstController::class,'showreq']);
 // Route::get('/requst/{employee_num_id}',[RequstController::class,'show']);
 // Route::get('/requst',[RequstController::class,'index']);
 // Route::post('/requst',[RequstController::class,'store']);
