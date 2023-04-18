@@ -40,7 +40,7 @@ class CourseController extends Controller
             return response()->json(['message' => 'Hall number does not exist.'], 422);
         }
         $concatenatedData =
-            $request->get('course_code') .
+            $request->get('code') .
             '-' . $request->get('hall_num_id') .
             '-' . $request->get('course_name') .
             '-' . $request->get('program') .
@@ -59,7 +59,7 @@ class CourseController extends Controller
         }
         $concatenatedData = str_replace(' ', '', $concatenatedData);
         DB::table('courses')->insert([
-            'course_code' => $request->get('course_code'),
+            'code' => $request->get('code'),
             'hall_num_id' => $request->get('hall_num_id'),
             'course_name' => $request->get('course_name'),
             'program' => $request->get('program'),
@@ -106,7 +106,7 @@ class CourseController extends Controller
             if ($courses) {
                 $courses->fill($request->all());
                 $concatenatedData =
-                    $courses->course_code .
+                    $courses->code .
                     '-' . $courses->hall_num_id .
                     '-' . $courses->course_name .
                     '-' . $courses->credit_hours .

@@ -24,7 +24,7 @@ class UpdateCourseRrequest extends FormRequest
     public function rules()
     {
         return [
-            'course_code' => 'string',
+            'code' => 'string',
             'hall_num_id' => 'integer',
             'course_name' => 'string',
             'practic' => 'string',
