@@ -31,7 +31,7 @@ class CreateCourseRrequest extends FormRequest
             'practic' => 'required|string',
             'is_special' => 'required|bool',
             'credit_hours' => 'required|integer',
-            'semester' => 'required|integer',
+            'semester' => 'required|string',
             'level' => 'required|integer',
         ];
     }
