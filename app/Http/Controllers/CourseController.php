@@ -58,8 +58,9 @@ class CourseController extends Controller
             return response()->json(['message' => 'There is an Course is already exite.'], 422);
         }
         $concatenatedData = str_replace(' ', '', $concatenatedData);
+        $code = str_replace(' ', '', $request->get('code'));
         DB::table('courses')->insert([
-            'code' => $request->get('code'),
+            'code' => $code,
             'hall_num_id' => $request->get('hall_num_id'),
             'course_name' => $request->get('course_name'),
             'program' => $request->get('program'),
@@ -80,10 +81,15 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($code)
     {
-        if (filled($id) && is_string($id)) {
-            $hall = Course::find($id);
+
+        
+
+        if (filled($code) && is_string($code)) {
+            $hall = DB::table('courses')
+            ->where('code', '=', $code)
+            ->get();
             if ($hall)
                 return $hall;
             else
