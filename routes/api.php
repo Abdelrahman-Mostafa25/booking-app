@@ -38,6 +38,7 @@ Route::apiResource("requst",RequstController::class);
 
 
 Route::get('getRequst/{request_num_id}',[RequstController::class,'showreq']);
+Route::get('getRsponds/{employee_num_id}',[RequstController::class,'showrespond']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -87,11 +87,11 @@ class CourseController extends Controller
         
 
         if (filled($code) && is_string($code)) {
-            $hall = DB::table('courses')
+            $course = DB::table('courses')
             ->where('code', '=', $code)
             ->get();
-            if ($hall)
-                return $hall;
+            if ($course)
+                return $course;
             else
                 return "Not Found";
         } else
@@ -141,7 +141,9 @@ class CourseController extends Controller
     public function destroy($course)
     {
         if (filled($course) && is_string($course)) {
-            $found = Course::find($course);
+            $found = DB::table('courses')
+            ->where('code', '=', $course)
+            ->get();
             if ($found) {
                 $found->delete();
                 return response('', 204);
