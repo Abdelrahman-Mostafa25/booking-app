@@ -30,9 +30,9 @@ class CreateCourseRrequest extends FormRequest
             'program' => 'required|string',
             'practic' => 'required|string',
             'is_special' => 'required|bool',
-            'credit_hours' => 'required|integer',
+            'credit_hours' => 'required|integer|min:1',
             'semester' => 'required|string',
-            'level' => 'required|integer',
+            'level' => 'required|integer|min:1',
         ];
     }
 }

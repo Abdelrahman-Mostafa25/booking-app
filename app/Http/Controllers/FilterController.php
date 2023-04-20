@@ -96,6 +96,7 @@ class FilterController extends Controller
             ->whereNotIn('hall_id', $eliminated_halls)
             ->where('type', '=', $hall_type)
             ->where('capacity', '=', $capacity_hall)
+            ->where('status', '=', 'avaliable')
             ->get()->map(function ($hall) {
                 $photos = DB::table('hall_photos')->where('hall_num_id', $hall->hall_id)->get();
                 $photoData = [];

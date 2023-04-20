@@ -30,7 +30,7 @@ class CreatRequst extends FormRequest
             'end_time_booking' =>  'required|date_format:H:i|after:start_time_booking',
             'booking_day' => 'required|date_format:Y-m-d',
             'text' => 'required|string',
-            'permental' => 'required|integer',
+            'permental' => 'required|integer|min:1',
         ];
     }
 }

@@ -66,6 +66,38 @@ class RequstController extends Controller
             return response()->json(['message' => 'Invalid input.'], 400);
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $employee_num_id
+     * @return \Illuminate\Http\Response
+     */
+    public function request_seen($request_num_id)
+    {
+        if (filled($request_num_id) && is_numeric($request_num_id)) {
+            $data = Requst::where('request_num_id', $request_num_id)->get();
+            $responses = [];
+            if ($data) {
+                // Update is_seen field to 1 for each record
+                Requst::where('request_num_id', $request_num_id)->update(['is_seen' => True]);
+    
+                foreach ($data as $request) {
+                    $employee = Employee::findOrFail($request->employee_num_id);
+                    $response = $request;
+                    $response['employee_email'] = $employee->email;
+                    $response['employee_name'] = $employee->employee_name;
+                    $responses[] = $response;
+                }
+                return response()->json($responses);
+            } else {
+                return "Not Found";
+            }
+        } else {
+            return response()->json(['message' => 'Invalid input.'], 400);
+        }
+    }
+
+
     /**
      * Display the specified resource.
      *

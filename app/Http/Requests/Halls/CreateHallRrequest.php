@@ -24,8 +24,8 @@ class CreateHallRrequest extends FormRequest
     public function rules()
     {
         return [
-            'hall_name' => 'required|string',
-            'capacity' => 'required|integer',
+            'hall_name' => 'required|string|unique:halls,hall_name',
+            'capacity' => 'required|integer|min:1',
             'has_monitor' => 'required|bool',
             'has_projector' => 'required|bool',
             'has_air_condition' => 'required|bool',
@@ -33,8 +33,8 @@ class CreateHallRrequest extends FormRequest
             'type' => 'required|string',
             'status' => 'required|string',
             'description_place' => 'string',
-            'floor_place' => 'integer',
-            'building_place' => 'integer',
+            'floor_place' => 'integer|min:1',
+            'building_place' => 'integer|min:1',
         ];
     }
 }

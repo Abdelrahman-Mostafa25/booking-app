@@ -29,9 +29,9 @@ class UpdateCourseRrequest extends FormRequest
             'course_name' => 'string',
             'practic' => 'string',
             'is_special' => 'bool',
-            'credit_hours' => 'integer',
-            'semester' => 'integer',
-            'level' => 'integer',
+            'credit_hours' => 'integer|min:1',
+            'semester' => 'string',
+            'level' => 'integer|min:1',
         ];
     }
 }

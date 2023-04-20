@@ -24,8 +24,8 @@ class UpdateHallRrequest extends FormRequest
     public function rules()
     {
         return [
-            'hall_name' => 'string',
-            'capacity' => 'integer',
+            'hall_name' => 'string|unique:halls,hall_name',
+            'capacity' => 'integer|min:1',
             'has_monitor' => 'bool',
             'has_projector' => 'bool',
             'has_air_condition' => 'bool',
@@ -33,8 +33,8 @@ class UpdateHallRrequest extends FormRequest
             'type' => 'string',
             'status' => 'string',
             'description_place' => 'string',
-            'floor_place' => 'integer',
-            'building_place' => 'integer',
+            'floor_place' => 'integer|min:1',
+            'building_place' => 'integer|min:1',
         ];
     }
 }
