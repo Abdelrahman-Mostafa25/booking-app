@@ -80,7 +80,7 @@ class RequstController extends Controller
             if ($data) {
                 // Update is_seen field to 1 for each record
                 Requst::where('request_num_id', $request_num_id)->update(['is_seen' => True]);
-    
+                $data = Requst::where('request_num_id', $request_num_id)->get();
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
                     $response = $request;
@@ -88,7 +88,8 @@ class RequstController extends Controller
                     $response['employee_name'] = $employee->employee_name;
                     $responses[] = $response;
                 }
-                return response()->json($responses);
+                
+                return response()->json($data);
             } else {
                 return "Not Found";
             }
