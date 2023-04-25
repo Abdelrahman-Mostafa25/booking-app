@@ -24,7 +24,7 @@ class CreateCourseRrequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string',
+            'code' => 'required|string|unique:courses,code',
             'hall_num_id' => 'required|integer',
             'course_name' => 'required|string',
             'program' => 'required|string',

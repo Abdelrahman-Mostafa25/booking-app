@@ -30,9 +30,10 @@ class TeacheController extends Controller
     public function store(CreateTeachRrequest $request)
     {
         $teache = $request->all();
+        $course_code = str_replace(' ', '', $request->get('course_code'));
         // check if the employee exists in the halls table
         $existingcourse = DB::table('courses')
-            ->where('course_code', $request->get('course_code'))
+            ->where('code',  $course_code)
             ->first();
 
         if (!$existingcourse) {
@@ -60,10 +61,10 @@ class TeacheController extends Controller
             return response()->json(['message' => 'There is an employee is already exite.'], 422);
         }
         $concatenatedData = str_replace(' ', '', $concatenatedData);
-
+        
         DB::table('teaches')->insert([
             'employee_num_id' => $request->get('employee_num_id'),
-            'course_code' => $request->get('course_code'),
+            'course_code' => $course_code,
             'concatenated_data' => $concatenatedData,
         ]);
 
@@ -150,6 +151,22 @@ class TeacheController extends Controller
                 return response('', 204);
             } else
                 return "Not Found";
+        } else
+            return response()->json(['message' => 'Invalid input.'], 400);
+    }
+
+    public function show_doctor_courses($employee_num_id)
+    {
+        if (filled($employee_num_id) && is_numeric($employee_num_id)) {
+            $course = DB::table('teaches')
+            ->where('employee_num_id','=' ,$employee_num_id)
+            ->get()->map(function ($courses) {
+                return [
+                    'course_name' =>  DB::table('courses')->where('code', $courses->course_code)->first()->course_name,
+                    'course-code' => DB::table('courses')->where('code', $courses->course_code)->first()->code,
+                ];
+            });
+            return $course;
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
     }

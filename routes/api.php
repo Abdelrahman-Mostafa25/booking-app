@@ -40,7 +40,10 @@ Route::apiResource("requst",RequstController::class);
 Route::get('getRequst/{request_num_id}',[RequstController::class,'showreq']);
 Route::get('getRsponds/{employee_num_id}',[RequstController::class,'showrespond']);
 Route::get('seen_req/{request_num_id}',[RequstController::class,'request_seen']);
-
+Route::get('get_schedule/{employee_num_id}',[BookingController::class,'show_schedule']);
+Route::get('get_levele_schedule/{program}/{level}/{semester}',[BookingController::class,'level_report']);
+Route::get('get_halls_schedule/{hall_num_id}',[BookingController::class,'halls_report']);
+Route::get('get_doctor_courses/{employee_num_id}',[TeacheController::class,'show_doctor_courses']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

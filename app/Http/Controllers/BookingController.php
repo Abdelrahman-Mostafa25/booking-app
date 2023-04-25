@@ -31,7 +31,7 @@ class BookingController extends Controller
     public function store(CreateBookRrequest $request)
     {
         $data = $request->all();
-        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-' . $request->get('end_time_booking') . '-' . $request->get('booking_day'). '-' . $request->get('type');
+        $concatenatedData = $request->get('hall_num_id') . '-' . $request->get('start_time_booking') . '-' . $request->get('end_time_booking') . '-' . $request->get('booking_day') . '-' . $request->get('type');
 
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:bookings,concatenated_data',
@@ -40,7 +40,9 @@ class BookingController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an employee that booked the same hall in the same time.'], 422);
         }
+
         $concatenatedData = str_replace(' ', '', $concatenatedData);
+        $code = $request->filled('code') ? $request->get('code') : NULL;
         DB::table('bookings')->insert([
             'employee_num_id' => $request->get('employee_num_id'),
             'hall_num_id' => $request->get('hall_num_id'),
@@ -48,6 +50,7 @@ class BookingController extends Controller
             'end_time_booking' => $request->get('end_time_booking'),
             'booking_day' => $request->get('booking_day'),
             'type' => $request->get('type'),
+            'code' => $code,
             'concatenated_data' => $concatenatedData,
         ]);
 
@@ -153,5 +156,106 @@ class BookingController extends Controller
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
+    }
+
+    public function show_schedule($employee_num_id)
+    {
+        if (filled($employee_num_id) && is_numeric($employee_num_id)) {
+            $bookings = Booking::where('employee_num_id', $employee_num_id)
+                ->whereNotNull('code')
+                ->get()->map(function ($booking) {
+                    return [
+                        'start_time' => $booking->start_time_booking,
+                        'end_time' => $booking->end_time_booking,
+                        'booking_day' => $booking->booking_day,
+                        'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                        'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name
+                    ];
+                });
+
+            return response()->json($bookings);
+        } else {
+            return response()->json(['message' => 'Invalid input.'], 400);
+        }
+    }
+
+
+    public function level_report($program, $level, $semester)
+    {
+        $validator = Validator::make([
+            'program' => $program,
+            'semester' => $semester,
+            'level' => $level
+        ], [
+            'semester' => 'string',
+            'program' => 'string',
+            'level' => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $courses_code = DB::table('courses')
+            ->where('program', '=', $program)
+            ->where('semester', '=', $semester)
+            ->where('level', '=', $level)
+            ->pluck('code')
+            ->toArray();
+
+
+        $booking_data = DB::table('bookings')
+            ->whereIn('code', $courses_code)
+            ->orderBy('booking_day', 'asc')
+            ->orderBy('start_time_booking', 'asc')
+            ->get()->map(function ($booking) {
+                return [
+                    'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
+                    'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                    'type_hall' => $booking->type,
+                    'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name,
+                    'booking_day' => $booking->booking_day,
+                    'start_time' => $booking->start_time_booking,
+                    'end_time' => $booking->end_time_booking,
+                ];
+            });
+
+        return $booking_data;
+    }
+
+    public function halls_report($hall_num_id)
+    {
+        $validator = Validator::make([
+            'program' => $hall_num_id,
+        ], [
+            'hall_num_id' => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+
+        $booking_data = DB::table('bookings')
+            ->where('hall_num_id','=' ,$hall_num_id)
+            ->orderBy('booking_day', 'asc')
+            ->orderBy('start_time_booking', 'asc')
+            ->get()->map(function ($booking) {
+                return [
+                    'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
+                    'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                    'type_hall' => $booking->type,
+                    'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name,
+                    'booking_day' => $booking->booking_day,
+                    'start_time' => $booking->start_time_booking,
+                    'end_time' => $booking->end_time_booking,
+                ];
+            });
+
+        return $booking_data;
     }
 }
