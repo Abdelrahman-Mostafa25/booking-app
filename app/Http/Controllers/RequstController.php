@@ -60,8 +60,8 @@ class RequstController extends Controller
                     $start_time = date("g:i A", strtotime($request->start_time_booking));
                     $end_time = date("g:i A", strtotime($request->end_time_booking));
                       // Convert date_time_send and update_request to 12-hour style
-                    $date_time_send = date('Y-m-d g:i A', strtotime($request->date_time_send));
-                    $update_request = date('Y-m-d g:i A', strtotime($request->update_request));
+                    $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
+                    $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
                     $response = $request;
                     // $response['hall_name'] = $hall->hall_name;
                     $response['employee_email'] = $employee->email;
