@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 
 class BookingController extends Controller
@@ -165,14 +166,14 @@ class BookingController extends Controller
                 ->whereNotNull('code')
                 ->get()->map(function ($booking) {
                     return [
-                        'start_time' => $booking->start_time_booking,
-                        'end_time' => $booking->end_time_booking,
-                        'booking_day' => $booking->booking_day,
+                        'start_time' => date('g:i A', strtotime($booking->start_time_booking)),
+                        'end_time' =>date('g:i A', strtotime($booking->end_time_booking)),
+                        'booking_date' => $booking->booking_day,
+                        'booking_day' => Carbon::parse($booking->booking_day)->format('l'),
                         'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
                         'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name
                     ];
                 });
-
             return response()->json($bookings);
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
