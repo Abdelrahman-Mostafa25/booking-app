@@ -55,16 +55,17 @@ class HallController extends Controller
             '-' . $request->get('description_place') .
             '-' . $request->get('floor_place') .
             '-' . $request->get('building_place');
-
+    
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:halls,concatenated_data',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an Hall is already exite.'], 422);
         }
+    
         $concatenatedData = str_replace(' ', '', $concatenatedData);
-        DB::table('halls')->insert([
+        $insertedData = DB::table('halls')->insertGetId([
             'hall_name' => $request->get('hall_name'),
             'capacity' => $request->get('capacity'),
             'has_monitor' => $request->get('has_monitor'),
@@ -78,10 +79,12 @@ class HallController extends Controller
             'building_place' => $request->get('building_place'),
             'concatenated_data' => $concatenatedData,
         ]);
-
-        return $hall;
-        
+    
+        $newHall = DB::table('halls')->where('hall_id', $insertedData)->first();
+    
+        return response()->json(['data' => $newHall]);
     }
+    
 
     /**
      * Display the specified resource.

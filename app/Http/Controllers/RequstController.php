@@ -56,10 +56,15 @@ class RequstController extends Controller
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
                     // $hall = Hall::findOrFail($request->hall_num);
+                      // Convert time format from 24-hour to 12-hour
+                    $start_time = date("g:i A", strtotime($request->start_time_booking));
+                    $end_time = date("g:i A", strtotime($request->end_time_booking));
                     $response = $request;
                     // $response['hall_name'] = $hall->hall_name;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
+                    $response['start_time_booking'] = $start_time;
+                    $response['end_time_booking'] = $end_time;
                     $responses[] = $response;
                 }
                 return response()->json($responses);
