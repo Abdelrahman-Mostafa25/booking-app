@@ -55,9 +55,9 @@ class RequstController extends Controller
             if ($data) {
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
-                    $hall = Hall::findOrFail($request->hall_num);
+                    // $hall = Hall::findOrFail($request->hall_num);
                     $response = $request;
-                    $response['hall_name'] = $hall->hall_name;
+                    // $response['hall_name'] = $hall->hall_name;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
                     $responses[] = $response;
@@ -66,7 +66,7 @@ class RequstController extends Controller
             } else
                 return "Not Found";
         } else
-        
+
             return response()->json(['message' => 'Invalid input.'], 400);
     }
 
