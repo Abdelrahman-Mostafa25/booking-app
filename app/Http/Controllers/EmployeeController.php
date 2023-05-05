@@ -31,32 +31,34 @@ class EmployeeController extends Controller
     {
         $employee = $request->all();
         $concatenatedData = 
-        $request->get('employee_name') . 
-        '-' . $request->get('email') . 
-        '-' . $request->get('password') . 
-        '-' . $request->get('phone_num') . 
-        '-' . $request->get('specialization');
+            $request->get('employee_name') . 
+            '-' . $request->get('email') . 
+            '-' . $request->get('password') . 
+            '-' . $request->get('phone_num') . 
+            '-' . $request->get('specialization');
         
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:employees,concatenated_data',
         ]);
     
         if ($validator->fails()) {
-            return response()->json(['message' => 'There is an employee is already exite.'], 422);
+            return response()->json(['message' => 'There is an employee already exists.'], 422);
         }   
+    
         $concatenatedData = str_replace(' ', '', $concatenatedData);
-        DB::table('employees')->insert([
+        $employee_id = DB::table('employees')->insertGetId([
             'employee_name' => $request->get('employee_name'),
             'email' => $request->get('email'),
             'password' => $request->get('password'),
             'phone_num' => $request->get('phone_num'),
             'specialization' => $request->get('specialization'),
             'concatenated_data' => $concatenatedData,
-            ]);
+        ]);
     
-        return $employee;
+        $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();
+    
+        return $inserted_employee;
     }
-
     /**
      * Display the specified resource.
      *

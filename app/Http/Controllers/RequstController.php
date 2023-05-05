@@ -59,12 +59,17 @@ class RequstController extends Controller
                       // Convert time format from 24-hour to 12-hour
                     $start_time = date("g:i A", strtotime($request->start_time_booking));
                     $end_time = date("g:i A", strtotime($request->end_time_booking));
+                      // Convert date_time_send and update_request to 12-hour style
+                    $date_time_send = date('Y-m-d g:i A', strtotime($request->date_time_send));
+                    $update_request = date('Y-m-d g:i A', strtotime($request->update_request));
                     $response = $request;
                     // $response['hall_name'] = $hall->hall_name;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
                     $response['start_time_booking'] = $start_time;
                     $response['end_time_booking'] = $end_time;
+                    $response['date_time_send'] = $date_time_send;
+                    $response['update_request'] = $update_request;
                     $responses[] = $response;
                 }
                 return response()->json($responses);
