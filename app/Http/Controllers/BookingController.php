@@ -164,21 +164,37 @@ class BookingController extends Controller
         if (filled($employee_num_id) && is_numeric($employee_num_id)) {
             $bookings = Booking::where('employee_num_id', $employee_num_id)
                 ->whereNotNull('code')
-                ->get()->map(function ($booking) {
-                    return [
-                        'start_time' => date('g:i A', strtotime($booking->start_time_booking)),
-                        'end_time' =>date('g:i A', strtotime($booking->end_time_booking)),
-                        'booking_date' => $booking->booking_day,
-                        'booking_day' => Carbon::parse($booking->booking_day)->format('l'),
-                        'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
-                        'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name
-                    ];
-                });
-            return response()->json($bookings);
+                ->orderBy('booking_day')
+                ->orderBy('start_time_booking')
+                ->get()
+                ->groupBy(function ($booking) {
+                    return Carbon::parse($booking->booking_day)->format('l');
+                })
+                ->map(function ($dayBookings) {
+                    return $dayBookings->map(function ($booking) {
+                        return [
+                            'start_time' => date('g:i A', strtotime($booking->start_time_booking)),
+                            'end_time' => date('g:i A', strtotime($booking->end_time_booking)),
+                            'booking_date' => $booking->booking_day,
+                            'booking_day' => Carbon::parse($booking->booking_day)->format('l'),
+                            'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                            'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name
+                        ];
+                    });
+                })
+                ->toArray();
+            
+            $schedule = [];
+            foreach ($bookings as $day => $dayBookings) {
+                $schedule[$day] = $dayBookings;
+            }
+            
+            return response()->json($schedule);
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
     }
+    
 
 
     public function level_report($program, $level, $semester)
