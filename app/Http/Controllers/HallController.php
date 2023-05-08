@@ -30,7 +30,7 @@ class HallController extends Controller
             }
             $hall['photos'] = $photos;
         }
-    
+
         return $halls;
     }
 
@@ -55,15 +55,15 @@ class HallController extends Controller
             '-' . $request->get('description_place') .
             '-' . $request->get('floor_place') .
             '-' . $request->get('building_place');
-    
+
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:halls,concatenated_data',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an Hall is already exite.'], 422);
         }
-    
+
         $concatenatedData = str_replace(' ', '', $concatenatedData);
         $insertedData = DB::table('halls')->insertGetId([
             'hall_name' => $request->get('hall_name'),
@@ -79,12 +79,12 @@ class HallController extends Controller
             'building_place' => $request->get('building_place'),
             'concatenated_data' => $concatenatedData,
         ]);
-    
+
         $newHall = DB::table('halls')->where('hall_id', $insertedData)->first();
-    
+
         return response()->json(['data' => $newHall]);
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -117,12 +117,12 @@ class HallController extends Controller
                     'floor_place' => $hall->floor_place,
                     'building_place' => $hall->building_place,
                 ];
-            
+
                 $responseData = [
                     'hall_data' => $hallData,
                     'photos' => $photoData,
                 ];
-            
+
                 return response()->json($responseData);
             } else
                 return "Not Found";
@@ -139,28 +139,35 @@ class HallController extends Controller
      */
     public function update(UpdateHallRrequest $request, $hall)
     {
+        // Check if $hall is valid
         if (filled($hall) && is_numeric($hall)) {
+            // Find the Hall object with the given ID
             $Halls = Hall::find($hall);
             if ($Halls) {
-                $Halls->fill($request->all());
-                $concatenatedData =
-                    $Halls->hall_name .
-                    '-' . $Halls->capacity .
-                    '-' . $Halls->has_monitor .
-                    '-' . $Halls->has_projector .
-                    '-' . $Halls->has_air_condition .
-                    '-' . $Halls->is_special .
-                    '-' . $Halls->type .
-                    '-' . $Halls->status .
-                    '-' . $Halls->description_place .
-                    '-' . $Halls->floor_place .
-                    '-' . $Halls->building_place;
+                // Check if the updated hall_name is the same as the existing one
+                if ($request->hall_name == $Halls->hall_name) {
+                    // Remove the hall_name from the request data
+                    $data = $request->except('hall_name');
+                } else {
+                    // Check if the hall_name already exists in the database
+                    $existingHall = Hall::where('hall_name', $request->hall_name)->first();
+                    if ($existingHall) {
+                        return response()->json(['message' => 'Hall name must be unique.'], 400);
+                    } else {
+                        $data = $request->all();
+                    }
+                }
+
+                // Update the Hall object with the updated data
+                $Halls->fill($data);
+                $concatenatedData = $Halls->hall_name . '-' . $Halls->capacity . '-' . $Halls->has_monitor . '-' . $Halls->has_projector . '-' . $Halls->has_air_condition . '-' . $Halls->is_special . '-' . $Halls->type . '-' . $Halls->status . '-' . $Halls->description_place . '-' . $Halls->floor_place . '-' . $Halls->building_place;
                 $concatenatedData = str_replace(' ', '', $concatenatedData);
                 $Halls->concatenated_data = $concatenatedData;
                 $Halls->save();
                 return $Halls;
-            } else
+            } else {
                 return "Not Found";
+            }
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }

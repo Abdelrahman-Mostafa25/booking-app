@@ -24,7 +24,7 @@ class UpdateHallRrequest extends FormRequest
     public function rules()
     {
         return [
-            'hall_name' => 'string|unique:halls,hall_name',
+            'hall_name' => 'string',
             'capacity' => 'integer|min:1',
             'has_monitor' => 'bool',
             'has_projector' => 'bool',
