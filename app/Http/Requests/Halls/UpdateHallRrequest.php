@@ -33,6 +33,8 @@ class UpdateHallRrequest extends FormRequest
             'type' => 'string',
             'status' => 'string',
             'description_place' => 'string',
+            'supervisor_name' => 'string',
+            'supervisor_phone' => 'string',
             'floor_place' => 'integer|min:1',
             'building_place' => 'integer|min:1',
         ];

@@ -54,6 +54,8 @@ class HallController extends Controller
             '-' . $request->get('status') .
             '-' . $request->get('description_place') .
             '-' . $request->get('floor_place') .
+            '-' . $request->get('supervisor_name') .
+            '-' . $request->get('supervisor_phone') .
             '-' . $request->get('building_place');
 
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
@@ -77,6 +79,8 @@ class HallController extends Controller
             'description_place' => $request->get('description_place'),
             'floor_place' => $request->get('floor_place'),
             'building_place' => $request->get('building_place'),
+            'supervisor_name' => $request->get('supervisor_name'),
+            'supervisor_phone' => $request->get('supervisor_phone'),
             'concatenated_data' => $concatenatedData,
         ]);
 
@@ -116,6 +120,8 @@ class HallController extends Controller
                     'description_place' => $hall->description_place,
                     'floor_place' => $hall->floor_place,
                     'building_place' => $hall->building_place,
+                    'supervisor_name' => $hall->supervisor_name,
+                    'supervisor_phone' => $hall->supervisor_phone,
                 ];
 
                 $responseData = [
@@ -160,7 +166,19 @@ class HallController extends Controller
 
                 // Update the Hall object with the updated data
                 $Halls->fill($data);
-                $concatenatedData = $Halls->hall_name . '-' . $Halls->capacity . '-' . $Halls->has_monitor . '-' . $Halls->has_projector . '-' . $Halls->has_air_condition . '-' . $Halls->is_special . '-' . $Halls->type . '-' . $Halls->status . '-' . $Halls->description_place . '-' . $Halls->floor_place . '-' . $Halls->building_place;
+                $concatenatedData = $Halls->hall_name . 
+                '-' . $Halls->capacity . 
+                '-' . $Halls->has_monitor . 
+                '-' . $Halls->has_projector . 
+                '-' . $Halls->has_air_condition . 
+                '-' . $Halls->is_special . 
+                '-' . $Halls->type . 
+                '-' . $Halls->status . 
+                '-' . $Halls->description_place . 
+                '-' . $Halls->floor_place . 
+                '-' . $Halls->supervisor_name . 
+                '-' . $Halls->supervisor_phone . 
+                '-' . $Halls->building_place;
                 $concatenatedData = str_replace(' ', '', $concatenatedData);
                 $Halls->concatenated_data = $concatenatedData;
                 $Halls->save();
@@ -172,6 +190,7 @@ class HallController extends Controller
             return response()->json(['message' => 'Invalid input.'], 400);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
