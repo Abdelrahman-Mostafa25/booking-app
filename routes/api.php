@@ -44,6 +44,7 @@ Route::get('get_schedule/{employee_num_id}',[BookingController::class,'show_sche
 Route::get('get_levele_schedule/{program}/{level}/{semester}',[BookingController::class,'level_report']);
 Route::get('get_halls_schedule/{hall_num_id}',[BookingController::class,'halls_report']);
 Route::get('get_doctor_courses/{employee_num_id}',[TeacheController::class,'show_doctor_courses']);
+Route::get('login/{employee_email}/{employee_password}',[EmployeeController::class,'login_function']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

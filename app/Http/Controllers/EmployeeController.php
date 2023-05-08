@@ -7,11 +7,13 @@ use App\Http\Requests\Employee\UpdateEmployeeRrequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
-  /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,35 +32,44 @@ class EmployeeController extends Controller
     public function store(CreateEmployeeRrequest $request)
     {
         $employee = $request->all();
-        $concatenatedData = 
-            $request->get('employee_name') . 
-            '-' . $request->get('email') . 
-            '-' . $request->get('password') . 
-            '-' . $request->get('phone_num') . 
+
+        $imageName = time().'.'.$request->employee_photo->extension();
+        $path = 'image/employee_photo';
+        // Public Folder
+        $request->employee_photo->move(public_path($path), $imageName);
+
+        $concatenatedData =
+            $request->get('employee_name') .
+            '-' . $request->get('email') .
+            '-' . $request->get('password') .
+            '-' . $request->get('phone_num') .
             '-' . $request->get('specialization');
-        
+
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:employees,concatenated_data',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['message' => 'There is an employee already exists.'], 422);
-        }   
-    
+        }
+
         $concatenatedData = str_replace(' ', '', $concatenatedData);
+        $hashedPassword = Hash::make($request->get('password'));
         $employee_id = DB::table('employees')->insertGetId([
             'employee_name' => $request->get('employee_name'),
             'email' => $request->get('email'),
-            'password' => $request->get('password'),
+            'password' => $hashedPassword,
             'phone_num' => $request->get('phone_num'),
             'specialization' => $request->get('specialization'),
             'concatenated_data' => $concatenatedData,
+            'employee_photo' => $path.'/'.$imageName,
         ]);
-    
+
         $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();
-    
+
         return $inserted_employee;
     }
+
     /**
      * Display the specified resource.
      *
@@ -90,6 +101,15 @@ class EmployeeController extends Controller
             $Employees = Employee::find($employee);
             if ($Employees) {
                 $Employees->fill($request->all());
+    
+                // Handle file upload
+                if ($request->hasFile('employee_photo')) {
+                    $imageName = time().'.'.$request->employee_photo->extension();
+                    $path = 'image/employee_photo';
+                    $request->employee_photo->move(public_path($path), $imageName);
+                    $Employees->employee_photo = $imageName;
+                }
+    
                 $concatenatedData =
                     $Employees->employee_name .
                     '-' . $Employees->email .
@@ -106,8 +126,8 @@ class EmployeeController extends Controller
             return response()->json(['message' => 'Invalid input.'], 400);
         }
         return $employee;
-        
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -126,5 +146,20 @@ class EmployeeController extends Controller
                 return "Not Found";
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function login_function($email, $password)
+    {
+        $employee = DB::table('employees')->where('email', $email)->first();
+        if ($employee && Hash::check($password, $employee->password)) {
+            return $employee->employee_id;
+        } else
+            return -1;
     }
 }

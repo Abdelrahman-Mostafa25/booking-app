@@ -25,10 +25,11 @@ class CreateEmployeeRrequest extends FormRequest
     {
         return [
             'employee_name' => 'required|string',
-            'email' => 'required|string',
+            'email' => 'required|string|unique:employees,email',
             'password' => 'required|string',
             'phone_num' => 'required|string',
             'specialization' => 'required|string',
+            'employee_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ];
     }
 }
