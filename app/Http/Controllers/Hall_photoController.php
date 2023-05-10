@@ -28,27 +28,26 @@ class Hall_photoController extends Controller
     {
         $request->validate([
             'hall_num_id' => 'required',
-            'photos' => 'required|array',
-            'photos.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
         ]);
 
+        $imageName = time() . '.' . $request->photo->extension();
         $path = 'image/hall_photos';
-        $uploaded_photos = [];
+        // Public Folder
+        $request->photo->move(public_path($path), $imageName);
 
-        foreach ($request->photos as $photo) {
-            $imageName = time() . '.' . $photo->extension();
-            $photo->move(public_path($path), $imageName);
-            $uploaded_photos[] = $path . '/' . $imageName;
-        }
 
-        // do something with the $uploaded_photos array, like storing it in the database or processing it in some way
+
+        Hall_photo::create([
+            'hall_num_id' => $request->hall_num_id,
+            'counter_id' => $request->counter_id,
+            'photo' => $path . '/' . $imageName,
+        ]);
 
         return response()->json([
             'message' => 'Photos uploaded successfully',
-            'data' => $uploaded_photos
         ]);
-    }
-
+    } // 
 
     /**
      * Display the specified resource.
