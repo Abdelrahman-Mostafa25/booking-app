@@ -143,11 +143,27 @@ class RequstController extends Controller
     {
         if (filled($employee_num_id) && is_numeric($employee_num_id)) {
             $data = Requst::where('employee_num_id', $employee_num_id)->get();
-            if ($data)
-                return $data;
-            else
+            $responses = [];
+            if ($data) {
+                foreach ($data as $request) {
+                    // Convert time format from 24-hour to 12-hour
+                    $start_time = date("g:i A", strtotime($request->start_time_booking));
+                    $end_time = date("g:i A", strtotime($request->end_time_booking));
+                    // Convert date_time_send and update_request to 12-hour style
+                    $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
+                    $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
+                    $response = $request;            
+                    $response['start_time_booking'] = $start_time;
+                    $response['end_time_booking'] = $end_time;
+                    $response['date_time_send'] = $date_time_send;
+                    $response['update_request'] = $update_request;
+                    $responses[] = $response;
+                }
+                return response()->json($responses);
+            } else
                 return "Not Found";
         } else
+
             return response()->json(['message' => 'Invalid input.'], 400);
     }
 
