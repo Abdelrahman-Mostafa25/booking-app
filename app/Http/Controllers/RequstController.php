@@ -26,7 +26,7 @@ class RequstController extends Controller
             $response['employee_name'] = $employee->employee_name;
             $responses[] = $response;
         }
-        return $responses;
+        return array_reverse($responses);
     }
 
     /**
