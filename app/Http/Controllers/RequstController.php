@@ -21,9 +21,19 @@ class RequstController extends Controller
         $responses = [];
         foreach ($requests as $request) {
             $employee = Employee::findOrFail($request->employee_num_id);
+            // Convert time format from 24-hour to 12-hour
+            $start_time = date("g:i A", strtotime($request->start_time_booking));
+            $end_time = date("g:i A", strtotime($request->end_time_booking));
+            // Convert date_time_send and update_request to 12-hour style
+            $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
+            $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
             $response = $request;
+            $response['start_time_booking'] = $start_time;
+            $response['end_time_booking'] = $end_time;
             $response['employee_email'] = $employee->email;
             $response['employee_name'] = $employee->employee_name;
+            $response['date_time_send'] = $date_time_send;
+            $response['update_request'] = $update_request;
             $responses[] = $response;
         }
         return array_reverse($responses);
@@ -56,10 +66,10 @@ class RequstController extends Controller
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
                     // $hall = Hall::findOrFail($request->hall_num);
-                      // Convert time format from 24-hour to 12-hour
+                    // Convert time format from 24-hour to 12-hour
                     $start_time = date("g:i A", strtotime($request->start_time_booking));
                     $end_time = date("g:i A", strtotime($request->end_time_booking));
-                      // Convert date_time_send and update_request to 12-hour style
+                    // Convert date_time_send and update_request to 12-hour style
                     $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
                     $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
                     $response = $request;
@@ -80,7 +90,7 @@ class RequstController extends Controller
             return response()->json(['message' => 'Invalid input.'], 400);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $employee_num_id
@@ -97,12 +107,22 @@ class RequstController extends Controller
                 $data = Requst::where('request_num_id', $request_num_id)->get();
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
+                     // Convert time format from 24-hour to 12-hour
+                    $start_time = date("g:i A", strtotime($request->start_time_booking));
+                    $end_time = date("g:i A", strtotime($request->end_time_booking));
+                    // Convert date_time_send and update_request to 12-hour style
+                    $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
+                    $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
                     $response = $request;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
+                    $response['start_time_booking'] = $start_time;
+                    $response['end_time_booking'] = $end_time;
+                    $response['date_time_send'] = $date_time_send;
+                    $response['update_request'] = $update_request;
                     $responses[] = $response;
                 }
-                
+
                 return response()->json($data);
             } else {
                 return "Not Found";
@@ -148,9 +168,19 @@ class RequstController extends Controller
             if ($data) {
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
+                    // Convert time format from 24-hour to 12-hour
+                    $start_time = date("g:i A", strtotime($request->start_time_booking));
+                    $end_time = date("g:i A", strtotime($request->end_time_booking));
+                    // Convert date_time_send and update_request to 12-hour style
+                    $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
+                    $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
                     $response = $request;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
+                    $response['start_time_booking'] = $start_time;
+                    $response['end_time_booking'] = $end_time;
+                    $response['date_time_send'] = $date_time_send;
+                    $response['update_request'] = $update_request;
                     $responses[] = $response;
                 }
                 return response()->json($responses);
