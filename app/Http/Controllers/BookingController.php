@@ -159,11 +159,10 @@ class BookingController extends Controller
         }
     }
 
-    public function show_schedule($employee_num_id)
+    public function get_schedule($employee_num_id)
     {
         if (filled($employee_num_id) && is_numeric($employee_num_id)) {
             $bookings = Booking::where('employee_num_id', $employee_num_id)
-                ->whereNotNull('code')
                 ->orderBy('booking_day')
                 ->orderBy('start_time_booking')
                 ->get()
@@ -172,29 +171,35 @@ class BookingController extends Controller
                 })
                 ->map(function ($dayBookings) {
                     return $dayBookings->map(function ($booking) {
+                        $hall_name = DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name;
+                        $course_name = DB::table('courses')->where('code', $booking->code)->first()->course_name ?? '';
+
+                        $color = 'gray';
+                        if ($booking->permental == 0 && filled($booking->code)) {
+                            $color = 'green';
+                        } elseif ($booking->permental > 0 && filled($booking->code)) {
+                            $color = 'red';
+                        }
+
                         return [
-                            'start_time' => date('g:i A', strtotime($booking->start_time_booking)),
-                            'end_time' => date('g:i A', strtotime($booking->end_time_booking)),
-                            'booking_date' => $booking->booking_day,
-                            'booking_day' => Carbon::parse($booking->booking_day)->format('l'),
-                            'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
-                            'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name
+                            'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
+                            'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
+                            'hall_name' => $hall_name,
+                            'course_name' => $course_name ,
+                            'color' => $color,
+                            // 'permental' => $booking->permental ,
+
                         ];
                     });
                 })
-                ->toArray();
-            
-            $schedule = [];
-            foreach ($bookings as $day => $dayBookings) {
-                $schedule[$day] = $dayBookings;
-            }
-            
-            return response()->json($schedule);
+                ->flatten(1)
+                ->values();
+    
+            return response()->json($bookings);
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
     }
-    
 
 
     public function level_report($program, $level, $semester)
