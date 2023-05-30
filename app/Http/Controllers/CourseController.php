@@ -108,6 +108,7 @@ class CourseController extends Controller
     public function update(UpdateCourseRrequest $request, $course)
     {
         if (filled($course) && is_string($course)) {
+            $course = str_replace(' ', '', $request->get('code'));
             $courses = Course::find($course);
             if ($courses) {
                 $courses->fill($request->all());

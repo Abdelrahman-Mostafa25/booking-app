@@ -51,6 +51,7 @@ class BookingController extends Controller
             'end_time_booking' => $request->get('end_time_booking'),
             'booking_day' => $request->get('booking_day'),
             'type' => $request->get('type'),
+            'permental' => $request->get('permental'),
             'code' => $code,
             'concatenated_data' => $concatenatedData,
         ]);
