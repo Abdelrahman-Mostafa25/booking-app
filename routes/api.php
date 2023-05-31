@@ -34,7 +34,7 @@ Route::apiResource("requst",RequstController::class);
 // Route::apiResource("teache",TeacheController::class);
 // Route::apiResource("hall_photo",Hall_photoController::class);
 // Route::apiResource("hall_supervisor",Hall_supervisorController::class);
-// Route::apiResource("booking",BookingController::class);
+Route::apiResource("booking",BookingController::class);
 
 
 Route::get('getRequst/{request_num_id}',[RequstController::class,'showreq']);

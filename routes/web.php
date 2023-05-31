@@ -26,11 +26,11 @@ Route::post('/teache',[TeacheController::class,'store']);
 Route::delete('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'destroy']);
 Route::put('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'update']);
 ////////////////////////////////////////
-Route::get('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'show']);
-Route::get('/booking',[BookingController::class,'index']);
-Route::post('/booking',[BookingController::class,'store']);
-Route::delete('/booking/{id}/{employee_num_id}/{hall_num_id}',[BookingController::class,'destroy']);
-Route::put('/booking/{id}/{employee_num_id}/{hall_num_id}',[BookingController::class,'update']);
+// Route::get('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'show']);
+// Route::get('/booking',[BookingController::class,'index']);
+// Route::post('/booking',[BookingController::class,'store']);
+// Route::delete('/booking/{id}/{employee_num_id}/{hall_num_id}',[BookingController::class,'destroy']);
+// Route::put('/booking/{id}/{employee_num_id}/{hall_num_id}',[BookingController::class,'update']);
 
 ////////////////////////////////////////
 Route::get('/hall_supervisor/{hall_num_id}',[Hall_supervisorController::class,'show']);

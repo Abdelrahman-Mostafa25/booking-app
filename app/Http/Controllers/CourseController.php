@@ -83,10 +83,8 @@ class CourseController extends Controller
      */
     public function show($code)
     {
-
-        
-
         if (filled($code) && is_string($code)) {
+            $code = str_replace(' ', '', $code);
             $course = DB::table('courses')
             ->where('code', '=', $code)
             ->get();
@@ -108,30 +106,45 @@ class CourseController extends Controller
     public function update(UpdateCourseRrequest $request, $course)
     {
         if (filled($course) && is_string($course)) {
-            $course = str_replace(' ', '', $request->get('code'));
-            $courses = Course::find($course);
-            if ($courses) {
-                $courses->fill($request->all());
+            $course = str_replace(' ', '', $course);
+            $courses = DB::table('courses')
+                ->where('code', '=', $course)
+                ->get();
+                
+            if ($courses->isNotEmpty()) {
+                DB::table('courses')
+                    ->where('code', '=', $course)
+                    ->update($request->all());
+    
+                $updatedCourse = DB::table('courses')
+                    ->where('code', '=', $course)
+                    ->first();
+    
                 $concatenatedData =
-                    $courses->code .
-                    '-' . $courses->hall_num_id .
-                    '-' . $courses->course_name .
-                    '-' . $courses->credit_hours .
-                    '-' . $courses->is_special .
-                    '-' . $courses->practic .
-                    '-' . $courses->semester .
-                    '-' . $courses->level;
+                    $updatedCourse->code .
+                    '-' . $updatedCourse->hall_num_id .
+                    '-' . $updatedCourse->course_name .
+                    '-' . $updatedCourse->credit_hours .
+                    '-' . $updatedCourse->is_special .
+                    '-' . $updatedCourse->practic .
+                    '-' . $updatedCourse->semester .
+                    '-' . $updatedCourse->level;
                 $concatenatedData = str_replace(' ', '', $concatenatedData);
-                $courses->concatenated_data = $concatenatedData;
-                $courses->save();
-                return $courses;
-            } else
+    
+                $courses = DB::table('courses')
+                    ->where('code', '=', $course)
+                    ->update(['concatenated_data' => $concatenatedData]);
+    
+                return response()->json($courses);
+            } else {
                 return "Not Found";
+            }
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-        return $course;
     }
+    
+    
 
     /**
      * Remove the specified resource from storage.
