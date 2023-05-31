@@ -70,8 +70,16 @@ class EmployeeController extends Controller
         ]);
 
         $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();
-
-        return $inserted_employee;
+        $response = [
+            'employee_id' => $inserted_employee->employee_id,
+            'employee_name' => $inserted_employee->employee_name,
+            'email' => $inserted_employee->email,
+            'password' => $inserted_employee->password,
+            'phone_num' => $inserted_employee->phone_num,
+            'specialization' => $inserted_employee->specialization,
+            'employee_photo' => $inserted_employee->employee_photo,
+        ];
+        return response()->json($response);
     }
 
 
