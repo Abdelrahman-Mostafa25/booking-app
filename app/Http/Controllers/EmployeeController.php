@@ -77,9 +77,10 @@ class EmployeeController extends Controller
             'password' => $inserted_employee->password,
             'phone_num' => $inserted_employee->phone_num,
             'specialization' => $inserted_employee->specialization,
-            'employee_photo' => $inserted_employee->employee_photo,
+            
         ];
         return response()->json($response);
+        // 'employee_photo' => $inserted_employee->employee_photo,
     }
 
 
