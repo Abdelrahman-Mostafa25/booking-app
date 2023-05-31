@@ -33,10 +33,10 @@ class EmployeeController extends Controller
     {
         $employee = $request->all();
 
-        $imageName = time().'.'.$request->employee_photo->extension();
-        $path = 'image/employee_photo';
-        // Public Folder
-        $request->employee_photo->move(public_path($path), $imageName);
+        // $imageName = time().'.'.$request->employee_photo->extension();
+        // $path = 'image/employee_photo';
+        // // Public Folder
+        // $request->employee_photo->move(public_path($path), $imageName);
 
         $concatenatedData =
             $request->get('employee_name') .
@@ -62,7 +62,7 @@ class EmployeeController extends Controller
             'phone_num' => $request->get('phone_num'),
             'specialization' => $request->get('specialization'),
             'concatenated_data' => $concatenatedData,
-            'employee_photo' => $path.'/'.$imageName,
+            // 'employee_photo' => $path.'/'.$imageName,
         ]);
 
         $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();

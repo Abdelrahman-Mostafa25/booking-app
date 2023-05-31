@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Complainss\CreateComplainRrequest;
 use App\Http\Requests\Complainss\UpdateComplainRrequest;
 use App\Models\Complain;
+use App\Models\Employee;
+use App\Models\Hall;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -117,6 +119,36 @@ class ComplainsController extends Controller
         }
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $employee_num_id
+     * @return \Illuminate\Http\Response
+     */
+    public function showcomp($compalin_num_id)
+    {
+        if (filled($compalin_num_id) && is_numeric($compalin_num_id)) {
+            $data = Complain::where('compalin_num_id', $compalin_num_id)->get();
+            $responses = [];
+            if ($data) {
+                foreach ($data as $request) {
+                    $employee = Employee::findOrFail($request->employee_num_id);
+                    $hall = Hall::findOrFail($request->hall_num);
+                    $response = $request;
+                    $response['hall_name'] = $hall->hall_name;
+                    $response['employee_email'] = $employee->email;
+                    $response['employee_name'] = $employee->employee_name;
+                    // $response['date_time_send'] = $date_time_send;
+                    $responses[] = $response;
+                }
+                return response()->json($responses);
+            } else
+                return "Not Found";
+        } else
+
+            return response()->json(['message' => 'Invalid input.'], 400);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -135,4 +167,5 @@ class ComplainsController extends Controller
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
     }
+
 }

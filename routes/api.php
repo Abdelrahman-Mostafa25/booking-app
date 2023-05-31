@@ -36,6 +36,7 @@ Route::apiResource("requst",RequstController::class);
 // Route::apiResource("hall_supervisor",Hall_supervisorController::class);
 Route::apiResource("booking",BookingController::class);
 
+Route::get('getComplains/{compalin_num_id}',[ComplainsController::class,'showcomp']);
 
 Route::get('getRequst/{request_num_id}',[RequstController::class,'showreq']);
 Route::get('getRsponds/{employee_num_id}',[RequstController::class,'showrespond']);
