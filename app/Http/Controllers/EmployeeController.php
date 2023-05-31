@@ -29,55 +29,50 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateEmployeeRrequest $request)
+
+        public function store(CreateEmployeeRrequest $request)
     {
-        $requst = Employee::create($request->all());
-        return $requst;
+        $employee = $request->all();
+
+        $imageName = null;
+        $path = 'image/employee_photo';
+
+        if ($request->hasFile('employee_photo')) {
+            $imageName = time().'.'.$request->employee_photo->extension();
+            $request->employee_photo->move(public_path($path), $imageName);
+        }
+
+        $concatenatedData =
+            $request->get('employee_name') .
+            '-' . $request->get('email') .
+            '-' . $request->get('password') .
+            '-' . $request->get('phone_num') .
+            '-' . $request->get('specialization');
+
+        $validator = Validator::make(['concatenated_data' => $concatenatedData], [
+            'concatenated_data' => 'unique:employees,concatenated_data',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'There is an employee already exists.'], 422);
+        }
+        $concatenatedData = str_replace(' ', '', $concatenatedData);
+
+
+        $hashedPassword = Hash::make($request->get('password'));
+        $employee_id = DB::table('employees')->insertGetId([
+            'employee_name' => $request->get('employee_name'),
+            'email' => $request->get('email'),
+            'password' => $hashedPassword,
+            'phone_num' => $request->get('phone_num'),
+            'specialization' => $request->get('specialization'),
+            'concatenated_data' => $concatenatedData,
+            'employee_photo' => $imageName ? $path.'/'.$imageName : null,
+        ]);
+
+        $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();
+
+        return $inserted_employee;
     }
-
-    //     public function store(CreateEmployeeRrequest $request)
-    // {
-    //     $employee = $request->all();
-
-    //     $imageName = null;
-    //     $path = 'image/employee_photo';
-
-    //     if ($request->hasFile('employee_photo')) {
-    //         $imageName = time().'.'.$request->employee_photo->extension();
-    //         $request->employee_photo->move(public_path($path), $imageName);
-    //     }
-
-    //     $concatenatedData =
-    //         $request->get('employee_name') .
-    //         '-' . $request->get('email') .
-    //         '-' . $request->get('password') .
-    //         '-' . $request->get('phone_num') .
-    //         '-' . $request->get('specialization');
-
-    //     $validator = Validator::make(['concatenated_data' => $concatenatedData], [
-    //         'concatenated_data' => 'unique:employees,concatenated_data',
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return response()->json(['message' => 'There is an employee already exists.'], 422);
-    //     }
-    //     $concatenatedData = str_replace(' ', '', $concatenatedData);
-
-
-    //     $hashedPassword = Hash::make($request->get('password'));
-    //     $employee_id = DB::table('employees')->insertGetId([
-    //         'employee_name' => $request->get('employee_name'),
-    //         'email' => $request->get('email'),
-    //         'password' => $hashedPassword,
-    //         'phone_num' => $request->get('phone_num'),
-    //         'specialization' => $request->get('specialization'),
-    //         'concatenated_data' => $concatenatedData,
-    //         'employee_photo' => $imageName ? $path.'/'.$imageName : null,
-    //     ]);
-
-    //     $inserted_employee = DB::table('employees')->where('employee_id', $employee_id)->first();
-
-    //     return $inserted_employee;
-    // }
 
 
     /**
