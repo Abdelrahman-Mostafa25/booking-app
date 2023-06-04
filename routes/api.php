@@ -30,8 +30,9 @@ Route::apiResource("course",CourseController::class);
 Route::apiResource("employee",EmployeeController::class);
 Route::apiResource("hall",HallController::class);
 Route::apiResource("requst",RequstController::class);
+Route::apiResource("teache",TeacheController::class);
+
 // Route::apiResource("supervisor_info",Supervisor_infoController::class);
-// Route::apiResource("teache",TeacheController::class);
 // Route::apiResource("hall_photo",Hall_photoController::class);
 // Route::apiResource("hall_supervisor",Hall_supervisorController::class);
 Route::apiResource("booking",BookingController::class);

@@ -170,14 +170,11 @@ class CourseController extends Controller
     public function destroy($course)
     {
         if (filled($course) && is_string($course)) {
+            $course = str_replace(' ', '', $course);
             $found = DB::table('courses')
             ->where('code', '=', $course)
-            ->get();
-            if ($found) {
-                $found->delete();
+            ->delete();
                 return response('', 204);
-            } else
-                return "Not Found";
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
     }

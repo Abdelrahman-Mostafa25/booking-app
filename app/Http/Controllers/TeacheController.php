@@ -61,7 +61,8 @@ class TeacheController extends Controller
             return response()->json(['message' => 'There is an employee is already exite.'], 422);
         }
         $concatenatedData = str_replace(' ', '', $concatenatedData);
-        
+        $course_code = str_replace(' ', '', $course_code);
+
         DB::table('teaches')->insert([
             'employee_num_id' => $request->get('employee_num_id'),
             'course_code' => $course_code,
@@ -78,10 +79,10 @@ class TeacheController extends Controller
      * @param  string  $course_code
      * @return \Illuminate\Http\Response
      */
-    public function show($employee_num_id, $course_code)
+    public function show($teach_id)
     {
-        if (filled($employee_num_id) && filled($course_code) && is_numeric($employee_num_id) && is_string($course_code)) {
-            $teach =  Teache::where('employee_num_id', $employee_num_id)->where('course_code', $course_code)->get();
+        if (filled($teach_id) && is_numeric($teach_id)) {
+            $teach =  Teache::where('id', $teach_id)->get();
             if ($teach->isNotEmpty())
                 return $teach;
             else
@@ -98,43 +99,43 @@ class TeacheController extends Controller
      * @param  string  $course_code
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTeachRrequest $request, $employee_num_id, $course_code)
+    public function update(UpdateTeachRrequest $request, $teach_id)
     {
-        if (!is_numeric($employee_num_id) && !filled($employee_num_id)) {
-            return response()->json(['message' => 'Invalid employee number.'], 400);
+        if (is_numeric($teach_id) && filled($teach_id)) {
+            $teach = Teache::where('id', $teach_id)->first();
+            if (!$teach) {
+                return response()->json(['message' => 'Record not found.'], 404);
+            }
+            // Update record with new data
+            DB::table('teaches')->where('id', $teach_id)->update($request->all());
+
+            // Update concatenated_data with new values
+            $courseCode = $request->course_code;
+            $employeeNumId = $request->employee_num_id ?? $teach->employee_num_id;
+
+            $concatenatedData = '';
+            if (filled($courseCode)) {
+                $concatenatedData .= $courseCode;
+            }
+            if (filled($employeeNumId)) {
+                if (filled($courseCode)) {
+                    $concatenatedData .= '-';
+                }
+                $concatenatedData .= $employeeNumId;
+            }
+
+            $concatenatedData = str_replace(' ', '', $concatenatedData); // Remove spaces
+
+            DB::table('teaches')->where('id', $teach_id)->update(['concatenated_data' => $concatenatedData]);
+
+            // Return updated record
+            $teach = Teache::where('id', $teach_id)->first();
+            return response()->json($teach);
+        } else {
+            return "ERROR IN ID";
         }
-
-        // Check if course_code is valid
-        if (!is_string($course_code) && !filled($course_code)) {
-            return response()->json(['message' => 'Invalid course code.'], 400);
-        }
-
-        // Check if record exists
-        $teach = Teache::where('course_code', $course_code)
-            ->where('employee_num_id', $employee_num_id)
-            ->first();
-
-
-        if (!$teach) {
-            return response()->json(['message' => 'Record not found.'], 404);
-        }
-        // Update record with new data
-        DB::table('teaches')
-            ->where('employee_num_id', $employee_num_id)
-            ->where('course_code', $course_code)
-            ->update($request->all());
-
-        // Update concatenated_data with new values
-        $concatenatedData = $request->course_code . '-' . $request->employee_num_id;
-        $concatenatedData = str_replace(' ', '', $concatenatedData);
-        DB::table('teaches')
-        ->where('employee_num_id', $request->employee_num_id)
-        ->where('course_code', $request->course_code)
-        ->update(['concatenated_data' => $concatenatedData]);
-
-        // Return updated record
-        return response()->json($teach);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -142,30 +143,27 @@ class TeacheController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($employee_num_id, $course_code)
+    public function destroy($teach_id)
     {
-        if (filled($employee_num_id) && filled($course_code) && is_numeric($employee_num_id) && is_string($course_code)) {
-            $teach =  Teache::where('employee_num_id', $employee_num_id)->where('course_code', $course_code)->get();
-            if ($teach->isNotEmpty()) {
-                $teach->delete();
-                return response('', 204);
-            } else
-                return "Not Found";
+        if (filled($teach_id) && is_numeric($teach_id)) {
+            $teach = Teache::where('id', $teach_id)->delete();
+            return response('', 204);
         } else
             return response()->json(['message' => 'Invalid input.'], 400);
     }
+
 
     public function show_doctor_courses($employee_num_id)
     {
         if (filled($employee_num_id) && is_numeric($employee_num_id)) {
             $course = DB::table('teaches')
-            ->where('employee_num_id','=' ,$employee_num_id)
-            ->get()->map(function ($courses) {
-                return [
-                    'course_name' =>  DB::table('courses')->where('code', $courses->course_code)->first()->course_name,
-                    'course-code' => DB::table('courses')->where('code', $courses->course_code)->first()->code,
-                ];
-            });
+                ->where('employee_num_id', '=', $employee_num_id)
+                ->get()->map(function ($courses) {
+                    return [
+                        'course_name' =>  DB::table('courses')->where('code', $courses->course_code)->first()->course_name,
+                        'course-code' => DB::table('courses')->where('code', $courses->course_code)->first()->code,
+                    ];
+                });
             return $course;
         } else
             return response()->json(['message' => 'Invalid input.'], 400);

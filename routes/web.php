@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'show']);
-Route::get('/teache',[TeacheController::class,'index']);
-Route::post('/teache',[TeacheController::class,'store']);
-Route::delete('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'destroy']);
-Route::put('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'update']);
+// Route::get('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'show']);
+// Route::get('/teache',[TeacheController::class,'index']);
+// Route::post('/teache',[TeacheController::class,'store']);
+// Route::delete('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'destroy']);
+// Route::put('/teache/{employee_num_id}/{course_code}',[TeacheController::class,'update']);
 ////////////////////////////////////////
 // Route::get('/booking/{employee_num_id}/{hall_num_id}',[BookingController::class,'show']);
 // Route::get('/booking',[BookingController::class,'index']);
