@@ -20,9 +20,31 @@ class ComplainsController extends Controller
      */
     public function index()
     {
-        return Complain::all();
+        $complains = Complain::all();
+        $formattedComplains = [];
+    
+        foreach ($complains as $complain) {
+            $employee = Employee::findOrFail($complain->employee_num_id);
+            $hall = Hall::findOrFail($complain->hall_num);
+            $date_time_send = date("Y-m-d h:i:s A", strtotime($complain->date_time_send));
+    
+            $formattedComplain = [
+                'compalin_num_id' => $complain->compalin_num_id,
+                'employee_num_id' => $complain->employee_num_id,
+                'hall_num' => $complain->hall_num,
+                'hall_name' => $hall->hall_name,
+                'text_complain' => $complain->text_complain,
+                'date_time_send' => $date_time_send,
+                'employee_email' => $employee->email,
+                'employee_name' => $employee->employee_name
+            ];
+    
+            $formattedComplains[] = $formattedComplain;
+        }
+    
+        return $formattedComplains;
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -82,16 +104,34 @@ class ComplainsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        if (filled($id) && is_numeric($id)) {
-            $comp = Complain::find($id);
-            if ($comp)
-                return $comp;
-            else
-                return "Not Found";
-        } else
-            return response()->json(['message' => 'Invalid input.'], 400);
+{
+    if (filled($id) && is_numeric($id)) {
+        $comp = Complain::find($id);
+        if ($comp) {
+            $employee = Employee::findOrFail($comp->employee_num_id);
+            $hall = Hall::findOrFail($comp->hall_num);
+            $date_time_send = date("Y-m-d h:i:s A", strtotime($comp->date_time_send));
+            
+            $data = [
+                'compalin_num_id' => $comp->compalin_num_id,
+                'employee_num_id' => $comp->employee_num_id,
+                'hall_num' => $comp->hall_num,
+                'hall_name' => $hall->hall_name,
+                'text_complain' => $comp->text_complain,
+                'date_time_send' => $date_time_send,
+                'employee_email' => $employee->email,
+                'employee_name' => $employee->employee_name
+            ];
+            
+            return $data;
+        } else {
+            return "Not Found";
+        }
+    } else {
+        return response()->json(['message' => 'Invalid input.'], 400);
     }
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -117,36 +157,6 @@ class ComplainsController extends Controller
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-    }
-
-     /**
-     * Display the specified resource.
-     *
-     * @param  int  $employee_num_id
-     * @return \Illuminate\Http\Response
-     */
-    public function showcomp($compalin_num_id)
-    {
-        if (filled($compalin_num_id) && is_numeric($compalin_num_id)) {
-            $data = Complain::where('compalin_num_id', $compalin_num_id)->get();
-            $responses = [];
-            if ($data) {
-                foreach ($data as $request) {
-                    $employee = Employee::findOrFail($request->employee_num_id);
-                    $hall = Hall::findOrFail($request->hall_num);
-                    $response = $request;
-                    $response['hall_name'] = $hall->hall_name;
-                    $response['employee_email'] = $employee->email;
-                    $response['employee_name'] = $employee->employee_name;
-                    // $response['date_time_send'] = $date_time_send;
-                    $responses[] = $response;
-                }
-                return response()->json($responses);
-            } else
-                return "Not Found";
-        } else
-
-            return response()->json(['message' => 'Invalid input.'], 400);
     }
 
     /**

@@ -30,50 +30,65 @@ class CourseController extends Controller
     public function store(CreateCourseRrequest $request)
     {
         $course = $request->all();
-
-        // check if the hall_num exists in the halls table
-        $existingHall = DB::table('halls')
-            ->where('hall_id', $request->get('hall_num_id'))
-            ->first();
-
-        if (!$existingHall) {
+    
+        // Check if the hall_num_id exists in the halls table
+        $existingHall = null;
+        if ($request->has('hall_num_id')) {
+            $existingHall = DB::table('halls')
+                ->where('hall_id', $request->hall_num_id)
+                ->first();
+        }
+    
+        if (!$existingHall && $request->has('hall_num_id')) {
             return response()->json(['message' => 'Hall number does not exist.'], 422);
         }
+    
         $concatenatedData =
             $request->get('code') .
-            '-' . $request->get('hall_num_id') .
+            '-' . $request->get('hall_num_id', '') .
             '-' . $request->get('course_name') .
             '-' . $request->get('program') .
             '-' . $request->get('credit_hours') .
             '-' . $request->get('is_special') .
             '-' . $request->get('practic') .
+            '-' . $request->get('section') .
             '-' . $request->get('semester') .
             '-' . $request->get('level');
-
+    
         $validator = Validator::make(['concatenated_data' => $concatenatedData], [
             'concatenated_data' => 'unique:courses,concatenated_data',
         ]);
-
+    
         if ($validator->fails()) {
-            return response()->json(['message' => 'There is an Course is already exite.'], 422);
+            return response()->json(['message' => 'A course with similar data already exists.'], 422);
         }
+    
         $concatenatedData = str_replace(' ', '', $concatenatedData);
         $code = str_replace(' ', '', $request->get('code'));
-        DB::table('courses')->insert([
+        
+        // Prepare the data for insertion
+        $courseData = [
             'code' => $code,
-            'hall_num_id' => $request->get('hall_num_id'),
             'course_name' => $request->get('course_name'),
             'program' => $request->get('program'),
             'credit_hours' => $request->get('credit_hours'),
             'is_special' => $request->get('is_special'),
             'practic' => $request->get('practic'),
+            'section' => $request->get('section'),
             'semester' => $request->get('semester'),
             'level' => $request->get('level'),
             'concatenated_data' => $concatenatedData,
-        ]);
-
+        ];
+    
+        if ($request->has('hall_num_id')) {
+            $courseData['hall_num_id'] = $request->get('hall_num_id');
+        }
+    
+        DB::table('courses')->insert($courseData);
+    
         return $course;
     }
+    
 
     /**
      * Display the specified resource.

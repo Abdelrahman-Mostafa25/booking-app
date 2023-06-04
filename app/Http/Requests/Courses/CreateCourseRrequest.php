@@ -25,7 +25,7 @@ class CreateCourseRrequest extends FormRequest
     {
         return [
             'code' => 'required|string|unique:courses,code',
-            'hall_num_id' => 'required|integer',
+            'hall_num_id' => 'integer',
             'course_name' => 'required|string',
             'program' => 'required|string',
             'practic' => 'required|string',
