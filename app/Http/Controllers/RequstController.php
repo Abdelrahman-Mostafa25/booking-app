@@ -65,7 +65,7 @@ class RequstController extends Controller
             if ($data) {
                 foreach ($data as $request) {
                     $employee = Employee::findOrFail($request->employee_num_id);
-                    // $hall = Hall::findOrFail($request->hall_num);
+                    $hall = Hall::findOrFail($request->hall_num);
                     // Convert time format from 24-hour to 12-hour
                     $start_time = date("g:i A", strtotime($request->start_time_booking));
                     $end_time = date("g:i A", strtotime($request->end_time_booking));
@@ -73,7 +73,7 @@ class RequstController extends Controller
                     $date_time_send = date('Y-m-d g:iA', strtotime($request->date_time_send));
                     $update_request = date('Y-m-d g:iA', strtotime($request->update_request));
                     $response = $request;
-                    // $response['hall_name'] = $hall->hall_name;
+                    $response['hall_name'] = $hall->hall_name;
                     $response['employee_email'] = $employee->email;
                     $response['employee_name'] = $employee->employee_name;
                     $response['start_time_booking'] = $start_time;

@@ -269,16 +269,24 @@ class BookingController extends Controller
         ->orderBy('start_time_booking', 'asc')
         ->get()
         ->map(function ($booking) {
+            $startTime = date("h:i A", strtotime($booking->start_time_booking));
+            $endTime = date("h:i A", strtotime($booking->end_time_booking));
+            $dayName = date("l", strtotime($booking->booking_day));
+        
             return [
                 'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                 'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
                 'type_hall' => $booking->type,
-                'course_name' => DB::table('courses')->where('code', $booking->code)->first()->course_name ?? 'N/A',
+                'course_name' => DB::table('courses')->where('code', $booking->code)->first()->course_name ?? 
+                "Dr/ " . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                 'booking_day' => $booking->booking_day,
-                'start_time' => $booking->start_time_booking,
-                'end_time' => $booking->end_time_booking,
+                'day_name' => $dayName,
+                'start_time' => $startTime,
+                'end_time' => $endTime,
+                'permental' => $booking->permental,
             ];
         });
+        
     
     return $booking_data;
     
