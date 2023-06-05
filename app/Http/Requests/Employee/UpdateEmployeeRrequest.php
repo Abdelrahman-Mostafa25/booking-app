@@ -25,7 +25,7 @@ class UpdateEmployeeRrequest extends FormRequest
     {
         return [
             'employee_name' => 'string',
-            'email' => 'string|unique:employees,email',
+            'email' => 'string|exists::employees,email',
             'password' => 'string',
             'phone_num' => 'string',
             'specialization' => 'string',
