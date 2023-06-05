@@ -277,7 +277,7 @@ class BookingController extends Controller
                 'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                 'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
                 'type_hall' => $booking->type,
-                'course_name' => DB::table('courses')->where('code', $booking->code)->first()->course_name ?? 
+                'course_name' => DB::table('courses')->where('code', $booking->code)->first()->code ?? 
                 "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                 'booking_day' => $booking->booking_day,
                 'day_name' => $dayName,
