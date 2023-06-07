@@ -305,8 +305,8 @@ class BookingController extends Controller
             }
         });
     
-        return $booking_data;
-        
+        return $booking_data->values();
+
     
     }
 }
