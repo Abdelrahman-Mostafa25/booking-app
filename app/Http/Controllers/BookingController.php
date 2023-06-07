@@ -87,25 +87,19 @@ class BookingController extends Controller
      *  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBookIdRrequest $request, $id, $employee_num_id, $hall_num_id)
+    public function update(UpdateBookIdRrequest $request, $id)
     {
-        if (filled($id) && filled($employee_num_id) && filled($hall_num_id) && is_numeric($employee_num_id) && is_numeric($hall_num_id) && is_numeric($id)) {
+        if (filled($id) && is_numeric($id)) {
             $booking = DB::table('bookings')
                 ->where('id', $id)
-                ->where('employee_num_id', $employee_num_id)
-                ->where('hall_num_id', $hall_num_id)
                 ->get();
             if ($booking->isNotEmpty()) {
                 $bookings = DB::table('bookings')
                     ->where('id', $id)
-                    ->where('employee_num_id', $employee_num_id)
-                    ->where('hall_num_id', $hall_num_id)
                     ->update($request->all());
 
                 $updatedBooking = DB::table('bookings')
                     ->where('id', $id)
-                    ->where('employee_num_id', $employee_num_id)
-                    ->where('hall_num_id', $hall_num_id)
                     ->first();
 
                 $concatenatedData = $updatedBooking->hall_num_id
@@ -115,8 +109,6 @@ class BookingController extends Controller
                 $concatenatedData = str_replace(' ', '', $concatenatedData);
                 $bookings = DB::table('bookings')
                     ->where('id', $id)
-                    ->where('employee_num_id', $employee_num_id)
-                    ->where('hall_num_id', $hall_num_id)
                     ->update(['concatenated_data' => $concatenatedData]);
 
                 return response()->json($bookings);
