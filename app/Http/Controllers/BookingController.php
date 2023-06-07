@@ -288,7 +288,24 @@ class BookingController extends Controller
         });
         
     
-    return $booking_data;
+        $booking_data = $booking_data->filter(function ($booking) {
+            $permental = $booking['permental'];
+            $bookingDay = strtotime($booking['booking_day']);
+            $currentDay = strtotime(date('Y-m-d'));
+    
+            if ($permental > 0) {
+                $pastWeeks = $permental * 7 * 24 * 60 * 60; // Convert permental weeks to seconds
+                if ($bookingDay >= ($currentDay - $pastWeeks)) {
+                    return true; // Include the booking
+                } else {
+                    return false; // Exclude the booking
+                }
+            } else {
+                return true; // Include the booking (permental is 0 or less)
+            }
+        });
+    
+        return $booking_data;
     
     }
 }
