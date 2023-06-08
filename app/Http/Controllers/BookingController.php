@@ -226,10 +226,11 @@ class BookingController extends Controller
                     'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                     'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
                     'type_hall' => $booking->type,
-                    'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->course_name,
+                    'course_name' =>  DB::table('courses')->where('code', $booking->code)->first()->code,
                     'booking_day' => $booking->booking_day,
-                    'start_time' => $booking->start_time_booking,
-                    'end_time' => $booking->end_time_booking,
+                    'start_time' => date("g:i A", strtotime($booking->start_time_booking)),
+                    'end_time' => date("g:i A", strtotime($booking->end_time_booking)),
+                    
                 ];
             });
 
