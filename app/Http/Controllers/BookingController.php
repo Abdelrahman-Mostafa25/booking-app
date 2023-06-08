@@ -129,19 +129,15 @@ class BookingController extends Controller
      *  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $employee_num_id, $hall_num_id)
+    public function destroy($id)
     {
-        if (filled($id) && filled($employee_num_id) && filled($hall_num_id) && is_numeric($employee_num_id) && is_numeric($hall_num_id) && is_numeric($id)) {
+        if (filled($id) && is_numeric($id)) {
             $booking = DB::table('bookings')
                 ->where('id', $id)
-                ->where('employee_num_id', $employee_num_id)
-                ->where('hall_num_id', $hall_num_id)
                 ->get();
             if ($booking->isNotEmpty()) {
                 $booking = DB::table('bookings')
-                    ->where('id', $id)
-                    ->where('employee_num_id', $employee_num_id)
-                    ->where('hall_num_id', $hall_num_id);
+                    ->where('id', $id);
                 $booking->delete();
                 return response('', 204);
             } else {
@@ -165,8 +161,8 @@ class BookingController extends Controller
                 ->map(function ($dayBookings) {
                     return $dayBookings->map(function ($booking) {
                         $hall_name = DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name;
-                        $course_name = DB::table('courses')->where('code', $booking->code)->first()->course_name ?? '';
-
+                        $course_name = DB::table('courses')->where('code', $booking->code)->first()->code ?? 
+                        "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name;
                         $color = 'gray';
                         if ($booking->permental == 0 && filled($booking->code)) {
                             $color = 'green';
