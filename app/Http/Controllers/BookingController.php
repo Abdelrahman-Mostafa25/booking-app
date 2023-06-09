@@ -190,6 +190,44 @@ class BookingController extends Controller
         }
     }
 
+    public function get_doctor_schedule($employee_num_id)
+    {
+        if (filled($employee_num_id) && is_numeric($employee_num_id)) {
+            // Step 1: Fetch doctor's course codes from the "teaches" table
+            $courseCodes = DB::table('teaches')
+                ->where('employee_num_id', $employee_num_id)
+                ->pluck('course_code')
+                ->toArray();
+    
+            // Step 2: Fetch bookings that have codes in the doctor's course codes
+            $bookings = Booking::whereIn('code', $courseCodes)
+                ->orderBy('booking_day')
+                ->orderBy('start_time_booking')
+                ->get()
+                ->map(function ($booking) {
+                    $color = 'gray';
+                    if ($booking->permental == 0 && filled($booking->code)) {
+                        $color = 'green';
+                    } elseif ($booking->permental > 0 && filled($booking->code)) {
+                        $color = 'red';
+                    }
+    
+                    return [
+                        'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
+                        'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
+                        'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                        'course_name' => $booking->code ?? "Dr/" .  DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
+                        'color' => $color,
+                    ];
+                });
+    
+            return response()->json($bookings);
+        } else {
+            return response()->json(['message' => 'Invalid input.'], 400);
+        }
+    }
+    
+
 
     public function level_report($program, $level, $semester)
     {
