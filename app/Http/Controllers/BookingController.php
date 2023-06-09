@@ -148,49 +148,49 @@ class BookingController extends Controller
         }
     }
 
-    public function get_schedule($employee_num_id)
-    {
-        if (filled($employee_num_id) && is_numeric($employee_num_id)) {
-            $bookings = Booking::where('employee_num_id', $employee_num_id)
-                ->orderBy('booking_day')
-                ->orderBy('start_time_booking')
-                ->get()
-                ->groupBy(function ($booking) {
-                    return Carbon::parse($booking->booking_day)->format('l');
-                })
-                ->map(function ($dayBookings) {
-                    return $dayBookings->map(function ($booking) {
-                        $hall_name = DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name;
-                        $course_name = DB::table('courses')->where('code', $booking->code)->first()->code ?? 
-                        "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name;
-                        $color = 'gray';
-                        if ($booking->permental == 0 && filled($booking->code)) {
-                            $color = 'green';
-                        } elseif ($booking->permental > 0 && filled($booking->code)) {
-                            $color = 'red';
-                        }
+    // public function get_schedule($employee_num_id)
+    // {
+    //     if (filled($employee_num_id) && is_numeric($employee_num_id)) {
+    //         $bookings = Booking::where('employee_num_id', $employee_num_id)
+    //             ->orderBy('booking_day')
+    //             ->orderBy('start_time_booking')
+    //             ->get()
+    //             ->groupBy(function ($booking) {
+    //                 return Carbon::parse($booking->booking_day)->format('l');
+    //             })
+    //             ->map(function ($dayBookings) {
+    //                 return $dayBookings->map(function ($booking) {
+    //                     $hall_name = DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name;
+    //                     $course_name = DB::table('courses')->where('code', $booking->code)->first()->code ?? 
+    //                     "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name;
+    //                     $color = 'gray';
+    //                     if ($booking->permental == 0 && filled($booking->code)) {
+    //                         $color = 'green';
+    //                     } elseif ($booking->permental > 0 && filled($booking->code)) {
+    //                         $color = 'red';
+    //                     }
 
-                        return [
-                            'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
-                            'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
-                            'hall_name' => $hall_name,
-                            'course_name' => $course_name ,
-                            'color' => $color,
-                            // 'permental' => $booking->permental ,
+    //                     return [
+    //                         'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
+    //                         'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
+    //                         'hall_name' => $hall_name,
+    //                         'course_name' => $course_name ,
+    //                         'color' => $color,
+    //                         // 'permental' => $booking->permental ,
 
-                        ];
-                    });
-                })
-                ->flatten(1)
-                ->values();
+    //                     ];
+    //                 });
+    //             })
+    //             ->flatten(1)
+    //             ->values();
     
-            return response()->json($bookings);
-        } else {
-            return response()->json(['message' => 'Invalid input.'], 400);
-        }
-    }
+    //         return response()->json($bookings);
+    //     } else {
+    //         return response()->json(['message' => 'Invalid input.'], 400);
+    //     }
+    // }
 
-    public function get_doctor_schedule($employee_num_id)
+    public function get_schedule($employee_num_id)
     {
         if (filled($employee_num_id) && is_numeric($employee_num_id)) {
             // Step 1: Fetch doctor's course codes from the "teaches" table
