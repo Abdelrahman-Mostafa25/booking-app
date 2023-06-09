@@ -201,6 +201,10 @@ class BookingController extends Controller
     
             // Step 2: Fetch bookings that have codes in the doctor's course codes
             $bookings = Booking::whereIn('code', $courseCodes)
+            ->orWhere(function ($query) use ($employee_num_id) {
+                $query->where('code', null)
+                    ->where('employee_num_id', $employee_num_id);
+            })
                 ->orderBy('booking_day')
                 ->orderBy('start_time_booking')
                 ->get()

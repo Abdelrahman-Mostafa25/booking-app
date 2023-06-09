@@ -24,7 +24,7 @@ class CreateBookRrequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_num_id' => 'required|integer',
+            'employee_num_id' => 'integer',
             'hall_num_id' => 'required|integer',
             'start_time_booking' => 'required|date_format:H:i',
             'end_time_booking' =>  'required|date_format:H:i|after:start_time_booking',

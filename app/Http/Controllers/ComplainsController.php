@@ -34,6 +34,7 @@ class ComplainsController extends Controller
                 'hall_num' => $complain->hall_num,
                 'hall_name' => $hall->hall_name,
                 'text_complain' => $complain->text_complain,
+                'seen' => $complain->seen,
                 'date_time_send' => $date_time_send,
                 'employee_email' => $employee->email,
                 'employee_name' => $employee->employee_name
