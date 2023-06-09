@@ -120,6 +120,7 @@ class ComplainsController extends Controller
                 'hall_name' => $hall->hall_name,
                 'type_hall' => $hall->type,
                 'text_complain' => $comp->text_complain,
+                'seen' => $comp->seen,
                 'date_time_send' => $date_time_send,
                 'employee_email' => $employee->email,
                 'employee_name' => $employee->employee_name
