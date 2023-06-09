@@ -263,6 +263,7 @@ class BookingController extends Controller
             $dayName = date("l", strtotime($booking->booking_day));
         
             return [
+                'booking_id' => $booking->id,
                 'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                 'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
                 'type_hall' => $booking->type,
