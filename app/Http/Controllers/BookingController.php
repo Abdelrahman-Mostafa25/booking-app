@@ -220,7 +220,7 @@ class BookingController extends Controller
                         'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
                         'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
                         'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
-                        'course_name' => $booking->code ? $booking->code : "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
+                        'course_name' => $booking->code ?? "Dr/" .  DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
                         'color' => $color,
                     ];
                 });
