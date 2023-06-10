@@ -305,11 +305,13 @@ class BookingController extends Controller
                 $dayName = date("l", strtotime($booking->booking_day));
 
 
-                $doctor = null;
+                $doctor = "-";
+            if ($booking->employee_num_id) {
                 $employee = DB::table('employees')->where('employee_id', $booking->employee_num_id)->first();
                 if ($employee) {
                     $doctor = $employee->employee_name;
                 }
+            }
 
                 return [
                     'booking_id' => $booking->id,
