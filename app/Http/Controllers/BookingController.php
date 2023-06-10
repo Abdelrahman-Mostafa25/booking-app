@@ -183,7 +183,7 @@ class BookingController extends Controller
     //             })
     //             ->flatten(1)
     //             ->values();
-    
+
     //         return response()->json($bookings);
     //     } else {
     //         return response()->json(['message' => 'Invalid input.'], 400);
@@ -198,13 +198,13 @@ class BookingController extends Controller
                 ->where('employee_num_id', $employee_num_id)
                 ->pluck('course_code')
                 ->toArray();
-    
+
             // Step 2: Fetch bookings that have codes in the doctor's course codes
             $bookings = Booking::whereIn('code', $courseCodes)
-            ->orWhere(function ($query) use ($employee_num_id) {
-                $query->where('code', null)
-                    ->where('employee_num_id', $employee_num_id);
-            })
+                ->orWhere(function ($query) use ($employee_num_id) {
+                    $query->where('code', null)
+                        ->where('employee_num_id', $employee_num_id);
+                })
                 ->orderBy('booking_day')
                 ->orderBy('start_time_booking')
                 ->get()
@@ -215,7 +215,7 @@ class BookingController extends Controller
                     } elseif ($booking->permental > 0 && filled($booking->code)) {
                         $color = 'red';
                     }
-    
+
                     return [
                         'start_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->start_time_booking)),
                         'end_time' => $booking->booking_day . "T" . date('H:i:s', strtotime($booking->end_time_booking)),
@@ -224,13 +224,13 @@ class BookingController extends Controller
                         'color' => $color,
                     ];
                 });
-    
+
             return response()->json($bookings);
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
     }
-    
+
 
 
     public function level_report($program, $level, $semester)
@@ -272,7 +272,7 @@ class BookingController extends Controller
                     'booking_day' => $booking->booking_day,
                     'start_time' => date("g:i A", strtotime($booking->start_time_booking)),
                     'end_time' => date("g:i A", strtotime($booking->end_time_booking)),
-                    
+
                 ];
             });
 
@@ -295,36 +295,43 @@ class BookingController extends Controller
 
 
         $booking_data = DB::table('bookings')
-        ->where('hall_num_id', '=', $hall_num_id)
-        ->orderBy('booking_day', 'asc')
-        ->orderBy('start_time_booking', 'asc')
-        ->get()
-        ->map(function ($booking) {
-            $startTime = date("h:i A", strtotime($booking->start_time_booking));
-            $endTime = date("h:i A", strtotime($booking->end_time_booking));
-            $dayName = date("l", strtotime($booking->booking_day));
-        
-            return [
-                'booking_id' => $booking->id,
-                'Doctor' => DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
-                'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
-                'type_hall' => $booking->type,
-                'course_name' => DB::table('courses')->where('code', $booking->code)->first()->code ?? 
-                "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
-                'booking_day' => $booking->booking_day,
-                'day_name' => $dayName,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'permental' => $booking->permental,
-            ];
-        });
-        
-    
+            ->where('hall_num_id', '=', $hall_num_id)
+            ->orderBy('booking_day', 'asc')
+            ->orderBy('start_time_booking', 'asc')
+            ->get()
+            ->map(function ($booking) {
+                $startTime = date("h:i A", strtotime($booking->start_time_booking));
+                $endTime = date("h:i A", strtotime($booking->end_time_booking));
+                $dayName = date("l", strtotime($booking->booking_day));
+
+
+                $doctor = null;
+                $employee = DB::table('employees')->where('employee_id', $booking->employee_num_id)->first();
+                if ($employee) {
+                    $doctor = $employee->employee_name;
+                }
+
+                return [
+                    'booking_id' => $booking->id,
+                    'Doctor' => $doctor,
+                    'hall_name' => DB::table('halls')->where('hall_id', $booking->hall_num_id)->first()->hall_name,
+                    'type_hall' => $booking->type,
+                    'course_name' => DB::table('courses')->where('code', $booking->code)->first()->code ??
+                        "Dr/" . DB::table('employees')->where('employee_id', $booking->employee_num_id)->first()->employee_name,
+                    'booking_day' => $booking->booking_day,
+                    'day_name' => $dayName,
+                    'start_time' => $startTime,
+                    'end_time' => $endTime,
+                    'permental' => $booking->permental,
+                ];
+            });
+
+
         $booking_data = $booking_data->filter(function ($booking) {
             $permental = $booking['permental'];
             $bookingDay = strtotime($booking['booking_day']);
             $currentDay = strtotime(date('Y-m-d'));
-    
+
             if ($permental > 0) {
                 $pastWeeks = $permental * 7 * 24 * 60 * 60; // Convert permental weeks to seconds
                 if ($bookingDay >= ($currentDay - $pastWeeks)) {
@@ -336,9 +343,7 @@ class BookingController extends Controller
                 return true; // Include the booking (permental is 0 or less)
             }
         });
-    
-        return $booking_data->values();
 
-    
+        return $booking_data->values();
     }
 }
