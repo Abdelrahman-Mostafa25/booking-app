@@ -110,38 +110,93 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function update(UpdateEmployeeRrequest $request, $employee)
+    // {
+    //     if (filled($employee) && is_numeric($employee)) {
+    //         $Employees = Employee::find($employee);
+    //         if ($Employees) {
+    //             $Employees->fill($request->all());
+
+    //             // Handle file upload
+    //             if ($request->hasFile('employee_photo')) {
+    //                 $imageName = time() . '.' . $request->employee_photo->extension();
+    //                 $path = 'image/employee_photo';
+    //                 $request->employee_photo->move(public_path($path), $imageName);
+    //                 $Employees->employee_photo = $imageName;
+    //             }
+
+    //             $concatenatedData =
+    //                 $Employees->employee_name .
+    //                 '-' . $Employees->email .
+    //                 '-' . $Employees->password .
+    //                 '-' . $Employees->phone_num .
+    //                 '-' . $Employees->specialization;
+    //             $concatenatedData = str_replace(' ', '', $concatenatedData);
+    //             $Employees->concatenated_data = $concatenatedData;
+    //             $Employees->save();
+    //             return $Employees;
+    //         } else
+    //             return "Not Found";
+    //     } else {
+    //         return response()->json(['message' => 'Invalid input.'], 400);
+    //     }
+    //     return $employee;
+    // }
     public function update(UpdateEmployeeRrequest $request, $employee)
     {
         if (filled($employee) && is_numeric($employee)) {
-            $Employees = Employee::find($employee);
-            if ($Employees) {
-                $Employees->fill($request->all());
-
+            $employeeModel = Employee::find($employee);
+            if ($employeeModel) {
+                $employeeModel->fill($request->all());
+    
+                // Handle email update
+                if ($request->has('email')) {
+                    $newEmail = $request->email;
+                    $existingEmployee = Employee::where('email', $newEmail)->first();
+                    if ($existingEmployee && $existingEmployee->employee_id !== $employeeModel->employee_id) {
+                        return response()->json(['message' => 'Email already exists.'], 409);
+                    }
+                    $employeeModel->email = $newEmail;
+                }
+    
+                // Handle password update
+                if ($request->has('password')) {
+                    $hashedPassword = Hash::make($request->password);
+                    $employeeModel->password = $hashedPassword;
+                }
+    
                 // Handle file upload
                 if ($request->hasFile('employee_photo')) {
                     $imageName = time() . '.' . $request->employee_photo->extension();
                     $path = 'image/employee_photo';
                     $request->employee_photo->move(public_path($path), $imageName);
-                    $Employees->employee_photo = $imageName;
+                    $employeeModel->employee_photo = $imageName;
                 }
-
+    
+                // Update concatenated data
                 $concatenatedData =
-                    $Employees->employee_name .
-                    '-' . $Employees->email .
-                    '-' . $Employees->password .
-                    '-' . $Employees->phone_num .
-                    '-' . $Employees->specialization;
+                    $employeeModel->employee_name .
+                    '-' . $employeeModel->email .
+                    '-' . $employeeModel->password .
+                    '-' . $employeeModel->phone_num .
+                    '-' . $employeeModel->specialization;
                 $concatenatedData = str_replace(' ', '', $concatenatedData);
-                $Employees->concatenated_data = $concatenatedData;
-                $Employees->save();
-                return $Employees;
-            } else
+                $employeeModel->concatenated_data = $concatenatedData;
+    
+                // Save changes
+                $employeeModel->save();
+                
+                return $employeeModel;
+            } else {
                 return "Not Found";
+            }
         } else {
             return response()->json(['message' => 'Invalid input.'], 400);
         }
-        return $employee;
     }
+    
+    
+
 
 
     /**
